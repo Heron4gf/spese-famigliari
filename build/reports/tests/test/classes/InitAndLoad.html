@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.126s</div>
+<div class="counter">0.164s</div>
 <p>duration</p>
 </div>
 </td>
@@ -76,13 +76,13 @@
 <div id="tab0" class="tab">
 <h2>Failed tests</h2>
 <div class="test">
-<a name="saveUsers()"></a>
-<h3 class="failures">saveUsers()</h3>
+<a name="testLoadAllUsersAndTransactions()"></a>
+<h3 class="failures">testLoadAllUsersAndTransactions()</h3>
 <span class="code">
-<pre>org.opentest4j.AssertionFailedError
-	at app//org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:34)
-	at app//org.junit.jupiter.api.Assertions.fail(Assertions.java:115)
-	at app//InitAndLoad.saveUsers(InitAndLoad.java:73)
+<pre>org.opentest4j.AssertionFailedError: Failed to load users and transactions: Unable to run insert stmt on object User(id=null, name=UserA, transactions=[]): INSERT INTO `Users` (`name` ) VALUES (?)
+	at app//org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at app//org.junit.jupiter.api.Assertions.fail(Assertions.java:134)
+	at app//InitAndLoad.testLoadAllUsersAndTransactions(InitAndLoad.java:176)
 	at java.base@21.0.5/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base@21.0.5/java.lang.reflect.Method.invoke(Method.java:580)
 	at app//org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
@@ -178,8 +178,8 @@
 </tr>
 </thead>
 <tr>
-<td class="failures">saveUsers()</td>
-<td class="failures">0.126s</td>
+<td class="failures">testLoadAllUsersAndTransactions()</td>
+<td class="failures">0.164s</td>
 <td class="failures">failed</td>
 </tr>
 </table>
@@ -187,26 +187,26 @@
 <div id="tab2" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2025-06-01 16:33:21,446 [DEBUG] DaoManager created dao for class class it.unicam.cs.spesefamigliari.entities.Transaction with reflection
-2025-06-01 16:33:21,454 [DEBUG] DaoManager created dao for class class it.unicam.cs.spesefamigliari.entities.User with reflection
-2025-06-01 16:33:21,455 [INFO] TableUtils creating table 'Users'
-2025-06-01 16:33:21,757 [DEBUG] BaseJdbcConnectionSource opened connection to jdbc:sqlite:database.db got #124734309
-2025-06-01 16:33:21,777 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` VARCHAR NOT NULL ,  UNIQUE (`name`)) 
-2025-06-01 16:33:21,780 [INFO] TableUtils creating table 'Transactions'
-2025-06-01 16:33:21,782 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Transactions` (`user_id` INTEGER , `id` INTEGER PRIMARY KEY AUTOINCREMENT , `direction` VARCHAR NOT NULL , `amount` BLOB NOT NULL , `description` VARCHAR NOT NULL , `date` TIMESTAMP NOT NULL ) 
-2025-06-01 16:33:21,850 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Users` (`name` ) VALUES (?)' and 1 args, threw exception: org.sqlite.SQLiteException: [SQLITE_CONSTRAINT]  Abort due to constraint violation (UNIQUE constraint failed: Users.name)
+<pre>2025-06-01 17:13:54,719 [DEBUG] DaoManager created dao for class class it.unicam.cs.spesefamigliari.entities.Transaction with reflection
+2025-06-01 17:13:54,727 [DEBUG] DaoManager created dao for class class it.unicam.cs.spesefamigliari.entities.User with reflection
+2025-06-01 17:13:54,727 [INFO] TableUtils creating table 'Users'
+2025-06-01 17:13:55,086 [DEBUG] BaseJdbcConnectionSource opened connection to jdbc:sqlite:database.db got #909282611
+2025-06-01 17:13:55,107 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` VARCHAR NOT NULL ,  UNIQUE (`name`)) 
+2025-06-01 17:13:55,109 [INFO] TableUtils creating table 'Transactions'
+2025-06-01 17:13:55,109 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Transactions` (`user_id` INTEGER , `id` INTEGER PRIMARY KEY AUTOINCREMENT , `direction` VARCHAR NOT NULL , `amount` BLOB NOT NULL , `description` VARCHAR NOT NULL , `date` TIMESTAMP NOT NULL ) 
+2025-06-01 17:13:55,215 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Users` (`name` ) VALUES (?)' and 1 args, threw exception: org.sqlite.SQLiteException: [SQLITE_CONSTRAINT]  Abort due to constraint violation (UNIQUE constraint failed: Users.name)
 </pre>
 </span>
 </div>
 <div id="tab3" class="tab">
 <h2>Standard error</h2>
 <span class="code">
-<pre>java.sql.SQLException: Unable to run insert stmt on object User(id=null, name=aldo, transactions=[it.unicam.cs.spesefamigliari.entities.Transaction@1b7c473a]): INSERT INTO `Users` (`name` ) VALUES (?)
+<pre>java.sql.SQLException: Unable to run insert stmt on object User(id=null, name=UserA, transactions=[]): INSERT INTO `Users` (`name` ) VALUES (?)
 	at com.j256.ormlite.stmt.mapped.MappedCreate.insert(MappedCreate.java:139)
 	at com.j256.ormlite.stmt.StatementExecutor.create(StatementExecutor.java:464)
 	at com.j256.ormlite.dao.BaseDaoImpl.create(BaseDaoImpl.java:337)
 	at com.j256.ormlite.dao.BaseDaoImpl.createOrUpdate(BaseDaoImpl.java:396)
-	at InitAndLoad.saveUsers(InitAndLoad.java:70)
+	at InitAndLoad.testLoadAllUsersAndTransactions(InitAndLoad.java:126)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
@@ -307,7 +307,7 @@ Caused by: org.sqlite.SQLiteException: [SQLITE_CONSTRAINT]  Abort due to constra
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.10</a> at 1 giu 2025, 16:33:22</p>
+<a href="http://www.gradle.org">Gradle 8.10</a> at 1 giu 2025, 17:13:55</p>
 </div>
 </div>
 </body>

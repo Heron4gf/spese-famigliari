@@ -1,6 +1,8 @@
 package it.unicam.cs.spesefamigliari.money;
 
-public interface Currency {
+import java.io.Serializable;
+
+public interface Currency extends Serializable {
 
     String name();
     float absoluteValue();

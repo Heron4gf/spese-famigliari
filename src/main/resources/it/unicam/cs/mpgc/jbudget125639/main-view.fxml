@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Separator?>
+
+<BorderPane fx:controller="it.unicam.cs.mpgc.jbudget125639.MainController"
+            maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <left>
+        <VBox fx:id="navbar" prefWidth="180.0" spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #333; -fx-padding: 15;">
+            <Label text="Sections" style="-fx-font-weight: bold; -fx-font-size: 20; -fx-text-fill: white;">
+                <VBox.margin>
+                    <Insets bottom="10.0" />
+                </VBox.margin>
+            </Label>
+            <ListView fx:id="viewsListView" prefHeight="250.0" prefWidth="160.0" style="-fx-control-inner-background: #444; -fx-background-color: #444; -fx-border-color: #555; -fx-text-fill: white;">
+                <VBox.margin>
+                    <Insets bottom="10.0" />
+                </VBox.margin>
+            </ListView>
+            <Button fx:id="statsButton" text="Stats" onAction="#handleStatsClick" prefWidth="160.0" style="-fx-background-color: #5cb85c; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Button fx:id="usersButton" text="Users" onAction="#handleUsersClick" prefWidth="160.0" style="-fx-background-color: #f0ad4e; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        </VBox>
+    </left>
+    <center>
+        <VBox fx:id="contentArea" alignment="TOP_CENTER" spacing="25" style="-fx-padding: 30; -fx-background-color: #f4f4f4;">
+            <Label fx:id="currentViewNameLabel" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+            <Label fx:id="balanceLabel" style="-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: green;"/>
+
+            <!-- Filters Section -->
+            <HBox alignment="CENTER_LEFT" spacing="10" VBox.vgrow="NEVER">
+                <children>
+                    <Label text="Filter by:" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="directionFilterComboBox" promptText="Direction"/>
+                    <ComboBox fx:id="tagFilterComboBox" promptText="Tag"/>
+                    <ComboBox fx:id="timeSpanFilterComboBox" promptText="Time Span"/>
+                    <Button text="Apply Filters" onAction="#handleApplyFilters" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    <Button text="Clear Filters" onAction="#handleClearFilters" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </children>
+            </HBox>
+            <Separator/>
+
+            <!-- Add Transaction Button -->
+            <Button fx:id="addTransactionButton" text="Add New Transaction" onAction="#handleAddTransaction" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+            <!-- Transactions Table -->
+            <TableView fx:id="transactionsTable" VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1;">
+                <!-- Columns are defined in MainController -->
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

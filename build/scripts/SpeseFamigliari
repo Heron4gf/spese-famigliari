@@ -206,7 +206,7 @@ fi
 
 
 # Add default JVM options here. You can also use JAVA_OPTS and SPESE_FAMIGLIARI_OPTS to pass JVM options to this script.
-DEFAULT_JVM_OPTS='"--module-path" "$APP_HOME/lib" "--module" "SpeseFamigliari.main/it.unicam.cs.mpgc.jbudget125639.MainApplication"'
+DEFAULT_JVM_OPTS='"--add-modules" "javafx.controls,javafx.fxml" "--module-path" "$APP_HOME/lib" "--module" "SpeseFamigliari.main/it.unicam.cs.mpgc.jbudget125639.MainApplication"'
 
 # Collect all arguments for the java command:
 #   * DEFAULT_JVM_OPTS, JAVA_OPTS, JAVA_OPTS, and optsEnvironmentVar are not allowed to contain shell fragments,

@@ -6,7 +6,7 @@ plugins {
     id 'org.beryx.jlink' version '2.25.0'
 }
 
-group = 'it.unicam.cs.spesefamigliari' // Consider changing this to 'it.unicam.cs.mpgc.jbudget125639' for consistency with package name
+group = 'it.unicam.cs.mpgc.jbudget125639'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -18,9 +18,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'SpeseFamigliari.main'
-    // CORRECTED: Pointing to the actual package of your MainApplication
-    mainClass = 'it.unicam.cs.mpgc.jbudget125639.MainApplication'
+    mainModule = 'it.unicam.cs.mpgc.jbudget125639'
+    mainClass = 'it.unicam.cs.mpgc.jbudget125639.JBudgetLauncher'
 }
 
 javafx {
@@ -47,12 +46,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
-// IMPORTANT: Add this block to see the application's actual error messages
 tasks.withType(JavaExec) {
     standardOutput = System.out
     errorOutput = System.err
-    // Optional: Add more JVM arguments for detailed JavaFX FXML debugging if needed
-    // jvmArgs = ['-Djavafx.fxml.debug=true']
 }
 
 test {

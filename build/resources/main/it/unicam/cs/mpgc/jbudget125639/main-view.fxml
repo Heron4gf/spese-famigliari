@@ -36,13 +36,14 @@
             <Label fx:id="balanceLabel" style="-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: green;"/>
 
             <!-- Filters Section -->
+            <!-- Filters Section -->
             <HBox alignment="CENTER_LEFT" spacing="10" VBox.vgrow="NEVER">
                 <children>
                     <Label text="Filter by:" style="-fx-font-weight: bold;"/>
                     <ComboBox fx:id="directionFilterComboBox" promptText="Direction"/>
                     <ComboBox fx:id="tagFilterComboBox" promptText="Tag"/>
                     <ComboBox fx:id="timeSpanFilterComboBox" promptText="Time Span"/>
-                    <Button text="Apply Filters" onAction="#handleApplyFilters" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    <!-- IL PULSANTE 'APPLY FILTERS' E' STATO RIMOSSO -->
                     <Button text="Clear Filters" onAction="#handleClearFilters" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold;"/>
                 </children>
             </HBox>

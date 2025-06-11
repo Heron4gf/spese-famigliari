@@ -36,7 +36,7 @@ set APP_HOME=%DIRNAME%..
 for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and SPESE_FAMIGLIARI_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS="--module-path" "%APP_HOME%\lib" "--module" "SpeseFamigliari.main/it.unicam.cs.mpgc.jbudget125639.MainApplication"
+set DEFAULT_JVM_OPTS="--add-modules" "javafx.controls,javafx.fxml" "--module-path" "%APP_HOME%\lib" "--module" "SpeseFamigliari.main/it.unicam.cs.mpgc.jbudget125639.MainApplication"
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome

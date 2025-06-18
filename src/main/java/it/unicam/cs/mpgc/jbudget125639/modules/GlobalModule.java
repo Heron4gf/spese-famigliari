@@ -9,12 +9,13 @@ import it.unicam.cs.mpgc.jbudget125639.views.Global;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collection;
 import java.util.Objects;
 
 @RequiredArgsConstructor
 public class GlobalModule implements Module {
+
     private final ModulesManager modulesManager;
+
     @Getter
     private Global global;
 

@@ -2,20 +2,35 @@ package it.unicam.cs.mpgc.jbudget125639.modules;
 
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.Module;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class ModulesHandler implements ModulesManager {
-    private final Logger logger;
-    private final List<Module> modules = new ArrayList<>();
 
-    public void addModule(Module module) {
+    @NonNull
+    private Logger logger = Logger.getGlobal();
+    @NonNull
+    private Collection<Module> modules = new LinkedList<>();
+
+    public ModulesHandler(Module... modules) {
+        this(Logger.getGlobal(), Arrays.asList(modules));
+    }
+
+    @Override
+    public void add(@NonNull Module module) {
         this.modules.add(module);
+    }
+
+    @Override
+    public void addAndLoad(@NonNull Module module) {
+        add(module);
+        loadModule(module);
     }
 
     @Override

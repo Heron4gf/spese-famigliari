@@ -11,7 +11,7 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 public class MoneyAmount implements Serializable {
 
-    public MoneyAmount(@Positive double amount, @NonNull Currency currency) {
+    public MoneyAmount(@Positive double amount, @NonNull ICurrency currency) {
         this.cents = (int) amount*100;
         this.currency = currency;
     }
@@ -20,7 +20,7 @@ public class MoneyAmount implements Serializable {
     private final int cents;
 
     @NonNull
-    private final Currency currency;
+    private final ICurrency currency;
 
     public double toDouble() {
         return cents/100d;

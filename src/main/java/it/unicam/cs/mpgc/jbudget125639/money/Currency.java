@@ -1,12 +1,27 @@
 package it.unicam.cs.mpgc.jbudget125639.money;
 
-import java.io.Serializable;
+import lombok.RequiredArgsConstructor;
 
-public interface Currency extends Serializable {
+@RequiredArgsConstructor
+public enum Currency implements ICurrency {
 
-    String name();
-    float absoluteValue();
+    EUR(new BaseCurrency("Eur", "€")),
+    USD(new BaseCurrency("Dollar", "$"));
 
-    String format(double value);
+    private final ICurrency currency;
 
+    @Override
+    public String getName() {
+        return currency.getName();
+    }
+
+    @Override
+    public String getSymbol() {
+        return currency.getSymbol();
+    }
+
+    @Override
+    public String format(double value) {
+        return currency.format(value);
+    }
 }

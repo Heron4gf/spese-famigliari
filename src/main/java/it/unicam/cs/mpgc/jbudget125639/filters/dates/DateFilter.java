@@ -4,11 +4,15 @@ import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public abstract class DateFilter implements IFilter {
 
     protected Date date;

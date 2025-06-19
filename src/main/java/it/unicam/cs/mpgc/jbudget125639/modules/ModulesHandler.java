@@ -5,22 +5,17 @@ import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Log
 public class ModulesHandler implements ModulesManager {
 
     @NonNull
-    private Logger logger = Logger.getGlobal();
-    @NonNull
     private Collection<Module> modules = new LinkedList<>();
-
-    public ModulesHandler(Module... modules) {
-        this(Logger.getGlobal(), Arrays.asList(modules));
-    }
 
     @Override
     public void add(@NonNull Module module) {
@@ -55,9 +50,9 @@ public class ModulesHandler implements ModulesManager {
     private void loadModule(Module module) {
         try {
             module.load();
-            logger.info("Loaded module: " + module.name());
+            log.info("Loaded module: " + module.name());
         } catch (Exception e) {
-            logger.warning("Failed to load module " + module.name() + ": " + e.getMessage());
+            log.warning("Failed to load module " + module.name() + ": " + e.getMessage());
         }
     }
 
@@ -69,9 +64,9 @@ public class ModulesHandler implements ModulesManager {
     private void unloadModule(Module module) {
         try {
             module.unload();
-            logger.info("Unloaded module: " + module.name());
+            log.info("Unloaded module: " + module.name());
         } catch (Exception e) {
-            logger.warning("Failed to unload module " + module.name() + ": " + e.getMessage());
+            log.warning("Failed to unload module " + module.name() + ": " + e.getMessage());
         }
     }
 }

@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 public abstract class AbstractDatabase implements Database {
 

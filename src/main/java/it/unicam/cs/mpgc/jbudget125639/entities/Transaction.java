@@ -11,6 +11,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -18,12 +19,21 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @DatabaseTable(tableName = "Transactions")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@ToString
+@EqualsAndHashCode
 public class Transaction {
 
+    public Transaction(@NonNull TransactionDirection direction, @NonNull MoneyAmount amount, @NonNull String description, @NonNull Collection<TransactionTag> transactionTags) {
+        this(direction, amount, description);
+        this.transactionTags = transactionTags;
+    }
+
+    @ToString.Exclude
     @DatabaseField(foreign = true, columnName = "user_id", foreignAutoRefresh = true)
     @Setter(AccessLevel.PACKAGE)
     private User user;
 
+    @ToString.Exclude
     @DatabaseField(generatedId = true)
     private Integer id;
 
@@ -40,19 +50,18 @@ public class Transaction {
     private String description;
 
     @DatabaseField(canBeNull = false)
+    @NonNull
     private Date date = Date.from(Instant.now());
 
     @ForeignCollectionField(eager = true)
-    private Collection<TransactionTag> transactionTags;
+    @NonNull
+    private Collection<TransactionTag> transactionTags = Collections.emptyList();
 
     public int maxTagPriority() {
         return getAssociatedTags().mapToInt(Tag::getPriority).max().orElse(0);
     }
 
-    public Stream<Tag> getAssociatedTags() {
-        if (transactionTags == null) {
-            return Stream.empty();
-        }
+    public @NonNull Stream<Tag> getAssociatedTags() {
         return transactionTags.stream().map(TransactionTag::getTag);
     }
 }

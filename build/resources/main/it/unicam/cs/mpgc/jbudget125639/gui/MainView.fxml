@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+
+<!--
+  Definisce la finestra principale.
+  fx:controller collega questo file FXML alla sua classe controller.
+-->
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.unicam.cs.mpgc.jbudget125639.gui.MainViewController">
+
+    <!-- Pannello di sinistra con la lista delle View -->
+    <left>
+        <ListView fx:id="viewsListView" prefWidth="200"/>
+    </left>
+
+    <!-- Area centrale per mostrare i dettagli -->
+    <center>
+        <Label fx:id="detailsLabel" text="Seleziona una vista per vedere i dettagli">
+            <padding>
+                <Insets left="10"/>
+            </padding>
+        </Label>
+    </center>
+
+</BorderPane>

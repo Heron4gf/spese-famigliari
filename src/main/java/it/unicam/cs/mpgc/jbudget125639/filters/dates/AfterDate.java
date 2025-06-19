@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.jbudget125639.filters.dates;
 import java.util.Date;
 
 public class AfterDate extends DateFilter {
+
     public AfterDate(Date date) {
         super(date);
     }

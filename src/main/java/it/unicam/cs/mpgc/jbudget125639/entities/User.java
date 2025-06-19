@@ -31,13 +31,13 @@ public class User extends AbstractView {
     public double total(IFilter... filters) {
         return transactions.stream()
                 .filter(transaction -> Arrays.stream(filters).allMatch(filter -> filter.pass(transaction)))
-                .mapToDouble(transaction -> transaction.getAmount().toDouble())
+                .mapToDouble(transaction -> transaction.getAmount().getValue())
                 .sum();
     }
 
     public void addTransaction(@NonNull Transaction transaction) {
         transactions.add(transaction);
-        transaction.setUser(this); // Maintain bidirectional relationship
+        transaction.setUser(this);
     }
 
     @Override

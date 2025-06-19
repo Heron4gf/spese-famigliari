@@ -5,19 +5,20 @@ import it.unicam.cs.mpgc.jbudget125639.database.Database;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.Module;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
+import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.RequiresModulesManagerModule;
 import it.unicam.cs.mpgc.jbudget125639.views.Global;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
 
-@RequiredArgsConstructor
-public class GlobalModule implements Module {
+@Getter
+public class GlobalModule extends RequiresModulesManagerModule {
 
-    private final ModulesManager modulesManager;
-
-    @Getter
     private Global global;
+
+    public GlobalModule(ModulesManager modulesManager) {
+        super(modulesManager);
+    }
 
     @Override
     public String name() {
@@ -25,7 +26,7 @@ public class GlobalModule implements Module {
     }
 
     @Override
-    public void load() throws Exception {
+    public void internalLoad() throws Exception {
         DatabaseModule dbModule = modulesManager.getModule(DatabaseModule.class);
         Objects.requireNonNull(dbModule, "DatabaseModule dependency not loaded");
 
@@ -35,7 +36,7 @@ public class GlobalModule implements Module {
     }
 
     @Override
-    public void unload() {
+    public void internalUnload() {
         this.global = null;
     }
 }

@@ -16,7 +16,8 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class Global extends AbstractView implements ViewsHandler {
 
-    @NonNull private Collection<User> users = new HashSet<>();
+    @NonNull
+    private Collection<User> users = new HashSet<>();
 
     @Override
     public double total(IFilter... filters) {

@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    //id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.beryx.jlink' version '2.25.0'
 }
 
@@ -20,23 +20,18 @@ application {
     mainModule = 'it.unicam.cs.mpgc.jbudget'
     mainClass = 'it.unicam.cs.mpgc.jbudget125639.JBudgetLauncher'
 }
-/*
+
 javafx {
     version = '21'
     modules = ['javafx.controls', 'javafx.fxml']
-}*/
+}
 
 dependencies {
-    // 1. Importa il BOM di JUnit. Questo definisce le versioni per tutte le altre dipendenze JUnit.
     testImplementation platform('org.junit:junit-bom:5.10.0')
-
-    // 2. Dipendenza per scrivere i test (API). NON serve specificare la versione, la prende dal BOM.
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
 
-    // 3. LA DIPENDENZA MANCANTE: Dipendenza per eseguire i test (ENGINE).
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
-    // Le tue altre dipendenze...
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
     implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
     implementation 'org.glassfish:jakarta.el:4.0.2'
@@ -60,13 +55,13 @@ test {
     useJUnitPlatform()
 }
 
-/*jlink {
+jlink {
     imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
         name = 'app'
     }
-}*/
+}
 
 jlinkZip {
     group = 'distribution'

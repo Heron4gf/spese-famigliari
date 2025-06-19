@@ -2,6 +2,8 @@ package it.unicam.cs.mpgc.jbudget125639.money;
 
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
+
 @RequiredArgsConstructor
 public enum Currency implements ICurrency {
 

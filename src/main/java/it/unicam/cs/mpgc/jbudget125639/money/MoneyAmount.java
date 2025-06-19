@@ -1,33 +1,30 @@
 package it.unicam.cs.mpgc.jbudget125639.money;
 
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Positive;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-@Data
+@Getter
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class MoneyAmount implements Serializable {
 
-    public MoneyAmount(@Positive double amount, @NonNull ICurrency currency) {
-        this.cents = (int) amount*100;
-        this.currency = currency;
-    }
-
+    @NonNull
     @Positive
-    private final int cents;
+    @Digits(integer = 20, fraction = 2)
+    private final Double value;
 
     @NonNull
     private final ICurrency currency;
 
-    public double toDouble() {
-        return cents/100d;
-    }
-
     @Override
     public String toString() {
-        return currency.format(toDouble());
+        return currency.format(value);
     }
 }

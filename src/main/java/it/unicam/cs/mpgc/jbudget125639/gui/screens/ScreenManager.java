@@ -1,7 +1,8 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.screens;
 
-import it.unicam.cs.mpgc.jbudget125639.entities.User;
+import it.unicam.cs.mpgc.jbudget125639.views.View;
 import javafx.scene.layout.StackPane;
+import lombok.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +33,8 @@ public class ScreenManager {
      * @param screen la schermata da registrare
      * @throws IllegalArgumentException se una schermata con lo stesso ID è già registrata
      */
-    public void registerScreen(Screen screen) {
-        if (screens.containsKey(screen.getScreenId())) {
+    public void registerScreen(@NonNull Screen screen) {
+        if (isScreenRegistered(screen.getScreenId())) {
             throw new IllegalArgumentException("Screen with ID '" + screen.getScreenId() + "' is already registered");
         }
         
@@ -51,25 +52,19 @@ public class ScreenManager {
      * @param screenId l'ID della schermata da attivare
      * @throws IllegalArgumentException se la schermata non è registrata
      */
-    public void switchToScreen(String screenId) {
-        Screen targetScreen = screens.get(screenId);
-        if (targetScreen == null) {
-            throw new IllegalArgumentException("Screen with ID '" + screenId + "' is not registered");
-        }
-        
-        // Disattiva la schermata corrente se presente
+    public void switchToScreen(@NonNull String screenId) {
+        @NonNull Screen targetScreen = screens.get(screenId);
+
         if (currentScreen != null) {
             currentScreen.onDeactivate();
         }
-        
-        // Attiva la nuova schermata
         currentScreen = targetScreen;
         currentScreen.onActivate();
     }
     
     /**
      * Restituisce la schermata attualmente attiva.
-     * 
+     *
      * @return la schermata corrente o Optional.empty() se nessuna schermata è attiva
      */
     public Optional<Screen> getCurrentScreen() {
@@ -89,13 +84,11 @@ public class ScreenManager {
     /**
      * Aggiorna l'utente corrente per tutte le schermate registrate.
      * 
-     * @param user l'utente corrente
+     * @param view l'utente corrente
      */
-    public void setCurrentUser(User user) {
+    public void setViewer(View view) {
         screens.values().forEach(screen -> {
-            if (screen instanceof AbstractScreen) {
-                ((AbstractScreen) screen).setCurrentUser(user);
-            }
+            screen.setViewer(view);
         });
     }
     
@@ -110,7 +103,7 @@ public class ScreenManager {
      * Aggiorna i dati della schermata corrente.
      */
     public void updateCurrentScreen() {
-        if (currentScreen != null) {
+        if(getCurrentScreen().isPresent()) {
             currentScreen.updateData();
         }
     }

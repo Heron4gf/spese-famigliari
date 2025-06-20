@@ -29,6 +29,7 @@ public class HeaderBar {
     private final TextField tagsTextField;
     private final ComboBox<String> userComboBox;
     private final ServiceFactory.ServiceBundle services;
+
     private final Consumer<String> onUserChanged;
     private final Runnable onFiltersChanged;
 
@@ -76,14 +77,24 @@ public class HeaderBar {
     }
 
     public void refreshUsers() {
-        var userNames = services.viewService.getViewNames();
+        // This method is kept for backward compatibility but now uses updateUserList
+        updateUserList(List.of());
+    }
+    
+    /**
+     * Updates the user list in the combo box with the provided view names.
+     * This method is called by JBudgetApp to centralize view management.
+     * 
+     * @param viewNames the list of view names to display
+     */
+    public void updateUserList(List<String> viewNames) {
         userComboBox.getItems().clear();
-        userComboBox.getItems().addAll(userNames);
+        userComboBox.getItems().addAll(viewNames);
         userComboBox.getItems().add("");
         userComboBox.getItems().add("Aggiungi Utente...");
         
-        if (!userNames.isEmpty()) {
-            userComboBox.setValue(userNames.get(0));
+        if (!viewNames.isEmpty()) {
+            userComboBox.setValue(viewNames.get(0));
         }
     }
 

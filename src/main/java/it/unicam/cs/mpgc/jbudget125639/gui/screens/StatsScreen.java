@@ -34,8 +34,8 @@ public class StatsScreen extends AbstractScreen {
     
     @Override
     protected void refreshContent() {
-        if (currentUser != null) {
-            statsView.updateData(currentUser.getTransactions());
+        if (currentView != null) {
+            statsView.updateData(currentView.getFiltered());
         }
     }
     

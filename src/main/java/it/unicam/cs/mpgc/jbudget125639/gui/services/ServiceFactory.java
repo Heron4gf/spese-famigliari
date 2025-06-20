@@ -40,12 +40,8 @@ public class ServiceFactory {
         return getOrCreate(UserService.class, () -> new UserService(getValidationService(), modulesManager));
     }
     
-    public ViewService getViewService() {
-        return getOrCreate(ViewService.class, () -> new ViewService(modulesManager));
-    }
-    
     public ServiceBundle createServiceBundle() {
-        return new ServiceBundle(getDialogService(), getTransactionService(), getUserService(), getViewService());
+        return new ServiceBundle(getDialogService(), getTransactionService(), getUserService());
     }
     
     @RequiredArgsConstructor
@@ -53,6 +49,5 @@ public class ServiceFactory {
         @NonNull public final DialogService dialogService;
         @NonNull public final TransactionService transactionService;
         @NonNull public final UserService userService;
-        @NonNull public final ViewService viewService;
     }
 }

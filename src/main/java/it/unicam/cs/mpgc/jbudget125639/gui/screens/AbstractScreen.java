@@ -1,30 +1,25 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.screens;
 
-import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.ServiceFactory;
-import javafx.scene.Node;
+import it.unicam.cs.mpgc.jbudget125639.views.View;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Classe astratta che fornisce l'implementazione base per tutte le schermate.
  * Gestisce la logica comune come i servizi, l'utente corrente e il ciclo di vita base.
  */
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractScreen implements Screen {
     
     protected final ServiceFactory.ServiceBundle services;
     protected final String screenId;
-    protected User currentUser;
+
+    @Getter
+    protected View currentView;
     protected boolean initialized = false;
-    
-    /**
-     * Costruttore per la schermata astratta.
-     * 
-     * @param services i servizi dell'applicazione
-     * @param screenId l'identificatore univoco della schermata
-     */
-    protected AbstractScreen(ServiceFactory.ServiceBundle services, String screenId) {
-        this.services = services;
-        this.screenId = screenId;
-    }
+
     
     @Override
     public final String getScreenId() {
@@ -42,7 +37,7 @@ public abstract class AbstractScreen implements Screen {
     
     @Override
     public void updateData() {
-        if (currentUser != null) {
+        if (currentView != null) {
             refreshContent();
         }
     }
@@ -57,26 +52,13 @@ public abstract class AbstractScreen implements Screen {
     public void onDeactivate() {
         getNode().setVisible(false);
     }
-    
-    /**
-     * Imposta l'utente corrente per questa schermata.
-     * 
-     * @param user l'utente corrente
-     */
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
+
+    @Override
+    public void setViewer(View view) {
+        this.currentView = view;
         if (initialized) {
             updateData();
         }
-    }
-    
-    /**
-     * Restituisce l'utente corrente.
-     * 
-     * @return l'utente corrente o null se non impostato
-     */
-    protected User getCurrentUser() {
-        return currentUser;
     }
     
     /**

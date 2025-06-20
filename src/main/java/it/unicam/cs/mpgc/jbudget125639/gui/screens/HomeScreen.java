@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.screens;
 
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
+import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
 import it.unicam.cs.mpgc.jbudget125639.gui.components.TransactionDialog;
 import it.unicam.cs.mpgc.jbudget125639.gui.components.TransactionGrid;
@@ -94,9 +95,9 @@ public class HomeScreen extends AbstractScreen {
     
     @Override
     protected void refreshContent() {
-        if (currentUser != null) {
-            // Ottieni i filtri correnti (se disponibili) e filtra le transazioni
-            var transactions = currentUser.getTransactions();
+        if (currentView != null) {
+            // Ottieni tutte le transazioni senza filtri
+            var transactions = currentView.getFiltered();
             transactionGrid.updateTransactions(transactions);
         }
     }
@@ -111,8 +112,8 @@ public class HomeScreen extends AbstractScreen {
     }
     
     private void showAddTransactionDialog() {
-        if (currentUser == null) {
-            services.dialogService.showError("Nessun utente selezionato");
+        if (currentView == null) {
+            services.dialogService.showError("Nessuna vista selezionata");
             return;
         }
         
@@ -129,7 +130,12 @@ public class HomeScreen extends AbstractScreen {
                         transactionData.tags()
                 );
                 
-                services.transactionService.addTransactionToUser(currentUser, transaction);
+                // Cast View to User since TransactionService expects User
+                if (currentView instanceof User user) {
+                    services.transactionService.addTransactionToUser(user, transaction);
+                } else {
+                    throw new IllegalStateException("Current view is not a User");
+                }
                 refreshContent();
                 closeDialog(overlay);
             } catch (Exception e) {

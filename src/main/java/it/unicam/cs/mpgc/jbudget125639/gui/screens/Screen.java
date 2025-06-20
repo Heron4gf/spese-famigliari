@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.screens;
 
+import it.unicam.cs.mpgc.jbudget125639.views.View;
 import javafx.scene.Node;
 
 /**
@@ -44,4 +45,6 @@ public interface Screen {
      * @return l'ID della schermata
      */
     String getScreenId();
+
+    void setViewer(View view);
 }

@@ -133,4 +133,5 @@ public class DatabaseTest {
 
         assertEquals(1200.0, total, 0.001, "Il totale delle entrate non è corretto");
     }
+
 }

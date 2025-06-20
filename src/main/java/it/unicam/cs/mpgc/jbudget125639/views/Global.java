@@ -1,6 +1,5 @@
 package it.unicam.cs.mpgc.jbudget125639.views;
 
-import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
 import lombok.AllArgsConstructor;
@@ -17,12 +16,12 @@ import java.util.stream.Stream;
 public class Global extends AbstractView implements ViewsHandler {
 
     @NonNull
-    private Collection<User> users = new HashSet<>();
+    private Collection<View> views = new HashSet<>();
 
     @Override
-    public double total(IFilter... filters) {
-        return users.stream()
-                .mapToDouble(user -> user.total(filters))
+    public double total(@NonNull IFilter... filters) {
+        return views.stream()
+                .mapToDouble(view -> view.total(filters))
                 .sum();
     }
 
@@ -34,24 +33,29 @@ public class Global extends AbstractView implements ViewsHandler {
 
     @Override
     public Collection<Transaction> getFiltered(@NonNull IFilter... filters) {
-        return users.stream()
-                .map(user -> user.getFiltered(filters))
+        return views.stream()
+                .map(view -> view.getFiltered(filters))
                 .flatMap(Collection::stream)
                 .toList();
     }
 
     @Override
-    public Collection<View> getViews() {
-        return Stream.concat(users.stream(), Stream.of(this))
+    public @NonNull Collection<View> getViews() {
+        return Stream.concat(views.stream(), Stream.of(this))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public View getView(String name) {
+    public View getView(@NonNull String name) {
         return getViews().stream()
                 .filter(view -> view.getName().equals(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public void addView(@NonNull View view) {
+        this.views.add(view);
     }
 
 }

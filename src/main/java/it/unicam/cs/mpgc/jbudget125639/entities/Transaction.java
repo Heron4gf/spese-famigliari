@@ -7,6 +7,8 @@ import com.j256.ormlite.table.DatabaseTable;
 import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
 import it.unicam.cs.mpgc.jbudget125639.filters.tags.Tag;
 import it.unicam.cs.mpgc.jbudget125639.money.MoneyAmount;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.Instant;
@@ -20,7 +22,7 @@ import java.util.stream.Stream;
 @DatabaseTable(tableName = "Transactions")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"user"})
 public class Transaction {
 
     public Transaction(@NonNull TransactionDirection direction, @NonNull MoneyAmount amount, @NonNull String description, @NonNull Collection<TransactionTag> transactionTags) {
@@ -47,7 +49,10 @@ public class Transaction {
 
     @DatabaseField(canBeNull = false)
     @NonNull
+    @NotBlank(message = "La descrizione non può essere vuota.")
+    @Size(min = 3, max = 100, message = "La descrizione deve contenere tra 3 e 100 caratteri.")
     private String description;
+
 
     @DatabaseField(canBeNull = false)
     @NonNull

@@ -17,7 +17,6 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 application {
-    mainModule = 'it.unicam.cs.mpgc.jbudget'
     mainClass = 'it.unicam.cs.mpgc.jbudget125639.JBudgetLauncher'
 }
 
@@ -35,6 +34,7 @@ dependencies {
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
     implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
     implementation 'org.glassfish:jakarta.el:4.0.2'
+    implementation("com.dlsc.formsfx:formsfx-core:11.3.2")
 
     implementation 'org.xerial:sqlite-jdbc:3.41.2.2'
     implementation 'com.j256.ormlite:ormlite-jdbc:6.1'
@@ -65,4 +65,19 @@ jlink {
 
 jlinkZip {
     group = 'distribution'
+}
+
+
+task runGuiDemo(type: JavaExec) {
+    group = "Verification"
+    description = "Lancia la demo visuale della GUI"
+
+    classpath = sourceSets.test.runtimeClasspath
+
+    mainClass = 'it.unicam.cs.mpgc.jbudget125639.gui.TestGUI'
+
+    jvmArgs = [
+            '--module-path', configurations.testRuntimeClasspath.asPath,
+            '--add-modules', javafx.modules.join(',')
+    ]
 }

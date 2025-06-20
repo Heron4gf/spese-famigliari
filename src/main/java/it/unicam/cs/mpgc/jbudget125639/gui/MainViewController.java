@@ -2,28 +2,40 @@ package it.unicam.cs.mpgc.jbudget125639.gui;
 
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
+import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
 import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
-import it.unicam.cs.mpgc.jbudget125639.modules.ViewChoiceHandler;
+import it.unicam.cs.mpgc.jbudget125639.filters.dates.TimeSpan;
+import it.unicam.cs.mpgc.jbudget125639.filters.tags.NamedTag;
+import it.unicam.cs.mpgc.jbudget125639.gui.constants.UIConfig;
+import it.unicam.cs.mpgc.jbudget125639.gui.services.*;
+import it.unicam.cs.mpgc.jbudget125639.gui.services.validation.ValidationException;
+import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.AbstractModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.frontend.SetupFilters;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
+import it.unicam.cs.mpgc.jbudget125639.modules.frontend.UIComponentsModule;
 import it.unicam.cs.mpgc.jbudget125639.money.Currency;
-import it.unicam.cs.mpgc.jbudget125639.money.MoneyAmount;
-import it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule;
-import it.unicam.cs.mpgc.jbudget125639.views.View;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @NoArgsConstructor
-@SuppressWarnings("unchecked")
 public class MainViewController {
 
-    @FXML private ListView<String> viewsListView;
+    // FXML Components
+    @FXML private ComboBox<String> viewsComboBox;
+    @FXML private VBox filtersPane;
+
+    @FXML private ComboBox<IFilter> timeSpanFilterComboBox;
+    @FXML private ComboBox<IFilter> directionFilterComboBox;
+    @FXML private ComboBox<IFilter> tagFilterComboBox;
+
     @FXML private VBox detailsPane;
     @FXML private Label viewNameLabel;
     @FXML private Label viewBalanceLabel;
@@ -33,112 +45,204 @@ public class MainViewController {
     @FXML private TextField transactionAmountField;
     @FXML private ChoiceBox<Currency> transactionCurrencyChoiceBox;
     @FXML private ChoiceBox<TransactionDirection> transactionDirectionChoiceBox;
+    @FXML private ListView<NamedTag> transactionTagsListView;
 
-    private ModulesManager modulesManager;
-
-    private View currentView() {
-        return modulesManager.getModule(ViewChoiceHandler.class).selectedView();
-    }
+    private ServiceFactory.ServiceBundle services;
+    private List<IFilter> currentFilters = new ArrayList<>();
 
     public void initializeManager(@NonNull ModulesManager modulesManager) {
-        this.modulesManager = modulesManager;
-        initializeUIComponents();
+        // Initialize services first
+        ServiceFactory serviceFactory = new ServiceFactory(modulesManager);
+        this.services = serviceFactory.createServiceBundle();
+        
         populateViewsList();
-        setupListViewListener();
+        setupEventListeners();
+        updateDetailsForCurrentView();
+
+        // Initialize setupFilters after FXML injection
+        SetupFilters setupFilters = new SetupFilters(
+                List.of(
+                        new SetupFilters.FilterConfig<>(timeSpanFilterComboBox, TimeSpan.values(), "Tutti i periodi"),
+                        new SetupFilters.FilterConfig<>(directionFilterComboBox, TransactionDirection.values(), "Tutte le direzioni"),
+                        new SetupFilters.FilterConfig<>(tagFilterComboBox, NamedTag.values(), "Tutti i tag")
+                ),
+                this::applyFiltersOnChange
+        );
+
+        List<AbstractModule> modulesToLoad = List.of(
+                setupFilters,
+                new UIComponentsModule(transactionsTableView,
+                        transactionCurrencyChoiceBox,
+                        transactionDirectionChoiceBox,
+                        transactionTagsListView,
+                        transactionDescriptionField,
+                        transactionAmountField)
+        );
+
+        modulesToLoad.forEach(modulesManager::addAndLoad);
     }
 
-    private void initializeUIComponents() {
-        transactionsTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("direction"));
-        transactionsTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("moneyAmount"));
-        transactionsTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("description"));
-        transactionsTableView.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("date"));
+    private void applyFiltersOnChange() {
+        currentFilters.clear();
+        currentFilters.addAll(List.of(
+                timeSpanFilterComboBox.getValue(),
+                directionFilterComboBox.getValue(),
+                tagFilterComboBox.getValue()
+        ));
+        updateHeaderAndTable();
+    }
 
-        transactionCurrencyChoiceBox.setItems(FXCollections.observableArrayList(Currency.values()));
-        transactionCurrencyChoiceBox.setValue(Currency.EUR);
-        transactionDirectionChoiceBox.setItems(FXCollections.observableArrayList(TransactionDirection.values()));
-        transactionDirectionChoiceBox.setValue(TransactionDirection.OUT);
+    private void setupEventListeners() {
+        viewsComboBox.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldVal, newVal) -> handleViewSelection(newVal)
+        );
+    }
+
+    private void handleViewSelection(String viewName) {
+        if (viewName != null) {
+            services.viewService.setCurrentView(viewName);
+            updateDetailsForCurrentView();
+        }
     }
 
     private void populateViewsList() {
-        GlobalModule globalModule = modulesManager.getModule(GlobalModule.class);
-        viewsListView.setItems(globalModule.getGlobal().getViews()
-                .stream()
-                .map(View::getName)
-                .sorted()
-                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
-    }
-
-    private void setupListViewListener() {
-        ViewChoiceHandler viewChoiceHandler = modulesManager.getModule(ViewChoiceHandler.class);
-        viewsListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            viewChoiceHandler.setView(newVal);
-            updateDetailsForCurrentView();
-        });
+        viewsComboBox.setItems(services.viewService.getViewNames());
+        viewsComboBox.setPrefWidth(UIConfig.VIEWS_LIST_WIDTH.getValue());
     }
 
     private void updateDetailsForCurrentView() {
-        viewNameLabel.setText("Dettagli per: " + currentView().getName());
-        double balance = currentView().total(TransactionDirection.IN) - currentView().total(TransactionDirection.OUT);
-        viewBalanceLabel.setText(String.format("Saldo: %.2f EUR", balance));
-        transactionsTableView.setItems(FXCollections.observableArrayList(currentView().getFiltered()));
-        userControlsPane.setVisible(currentView() instanceof User);
+        filtersPane.setVisible(true);
+        
+        updateHeaderAndTable();
+        updateTransactionControls();
         detailsPane.setVisible(true);
     }
 
+    private void updateHeaderAndTable() {
+        viewNameLabel.setText(services.viewService.getFormattedViewDetails());
+        viewBalanceLabel.setText(services.viewService.getFormattedBalance());
+        
+        // Apply current filters to get filtered transactions
+        IFilter[] filtersArray = currentFilters.toArray(new IFilter[0]);
+        var transactions = FXCollections.observableArrayList(
+                services.viewService.getCurrentView().getFiltered(filtersArray)
+        );
+        transactionsTableView.setItems(transactions);
+    }
+
+    private void updateTransactionControls() {
+        boolean isUserView = services.viewService.isCurrentViewUser();
+        userControlsPane.setVisible(true);
+        
+        setControlsEnabled(isUserView);
+    }
+
+    private void setControlsEnabled(boolean enabled) {
+        List.of(transactionDescriptionField, transactionAmountField, transactionCurrencyChoiceBox, 
+                transactionDirectionChoiceBox, transactionTagsListView)
+            .forEach(control -> control.setDisable(!enabled));
+    }
+
+    @FunctionalInterface
+    private interface ThrowingOperation {
+        void execute() throws Exception;
+    }
+
+    private void executeWithErrorHandling(ThrowingOperation operation) {
+        try {
+            operation.execute();
+        } catch (ValidationException e) {
+            services.dialogService.showError(e);
+        } catch (NumberFormatException e) {
+            services.dialogService.showError("Importo non valido. Inserire un numero.");
+        } catch (Exception e) {
+            services.dialogService.showError("Errore: " + e.getMessage());
+        }
+    }
+
+    // Event Handlers
+
     @FXML
     private void handleAddNewUser() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nuovo Utente");
-        dialog.setHeaderText("Aggiungi un nuovo utente");
-        dialog.setContentText("Nome Utente:");
-        dialog.showAndWait().ifPresent(name -> {
-            if (name.trim().isEmpty()) return;
-            User newUser = new User(name.trim());
-            modulesManager.getModule(GlobalModule.class).getGlobal().addView(newUser);
-            populateViewsList();
-            viewsListView.getSelectionModel().select(newUser.getName());
+        executeWithErrorHandling(() -> {
+            Optional<String> userName = services.dialogService.showNewUserDialog();
+            if (userName.isPresent()) {
+                User newUser = services.userService.createAndAddUser(userName.get());
+                refreshViewsAndSelect(newUser.getName());
+            }
         });
     }
 
     @FXML
     private void handleAddTransaction() {
-        if (!(currentView() instanceof User user)) return;
-        try {
-            MoneyAmount moneyAmount = new MoneyAmount(Double.parseDouble(transactionAmountField.getText()), transactionCurrencyChoiceBox.getValue());
-            Transaction newTransaction = new Transaction(transactionDirectionChoiceBox.getValue(), moneyAmount, transactionDescriptionField.getText());
-            user.addTransaction(newTransaction); // Aggiunge solo alla collezione in memoria dell'utente
+        if (!services.viewService.isCurrentViewUser()) return;
+        
+        executeWithErrorHandling(() -> {
+            User user = services.viewService.getCurrentViewAsUser();
+            Transaction transaction = createTransactionFromInput();
+            
+            services.transactionService.addTransactionToUser(user, transaction);
             updateDetailsForCurrentView();
             clearTransactionFields();
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Errore Input", e.getMessage());
-        }
+        });
+    }
+
+    private Transaction createTransactionFromInput() throws ValidationException {
+        double amount = Double.parseDouble(transactionAmountField.getText());
+        Currency currency = transactionCurrencyChoiceBox.getValue();
+        TransactionDirection direction = transactionDirectionChoiceBox.getValue();
+        String description = transactionDescriptionField.getText();
+        
+        // Get selected tags
+        List<NamedTag> selectedTags = transactionTagsListView.getSelectionModel().getSelectedItems();
+        
+        return services.transactionService.createTransactionWithTags(direction, amount, currency, description, selectedTags);
     }
 
     @FXML
     private void handleDeleteTransaction() {
-        if (!(currentView() instanceof User user)) return;
         Transaction selectedTransaction = transactionsTableView.getSelectionModel().getSelectedItem();
-        if (selectedTransaction == null) return;
+        if (selectedTransaction == null) {
+            services.dialogService.showError("Nessuna transazione selezionata.");
+            return;
+        }
 
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Sei sicuro di voler eliminare la transazione?", ButtonType.YES, ButtonType.NO);
-        confirmAlert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
-                user.getTransactions().remove(selectedTransaction);
+        if (services.dialogService.confirmTransactionDeletion()) {
+            try {
+                User user = services.viewService.getCurrentViewAsUser();
+                services.transactionService.removeTransactionFromUser(user, selectedTransaction);
                 updateDetailsForCurrentView();
+            } catch (IllegalStateException e) {
+                services.dialogService.showError("Impossibile eliminare transazione da questa vista.");
             }
-        });
+        }
+    }
+
+    @FXML
+    private void handleDeleteView() {
+        String selectedViewName = viewsComboBox.getSelectionModel().getSelectedItem();
+        if (selectedViewName == null) {
+            services.dialogService.showError("Nessuna vista selezionata.");
+            return;
+        }
+
+        if (services.dialogService.confirmViewDeletion(selectedViewName)) {
+            services.viewService.deleteView(selectedViewName);
+            refreshViewsAndSelect(null);
+        }
+    }
+
+    private void refreshViewsAndSelect(String viewNameToSelect) {
+        populateViewsList();
+        if (viewNameToSelect != null) {
+            viewsComboBox.getSelectionModel().select(viewNameToSelect);
+        }
+        updateDetailsForCurrentView();
     }
 
     private void clearTransactionFields() {
         transactionDescriptionField.clear();
         transactionAmountField.clear();
-    }
-
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        transactionTagsListView.getSelectionModel().clearSelection();
     }
 }

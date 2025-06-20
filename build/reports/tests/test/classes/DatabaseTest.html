@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - Class DatabaseTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class DatabaseTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/default-package.html">default-package</a> &gt; DatabaseTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">4</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.241s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">Aggiunge una transazione a un utente</td>
+<td class="success">shouldAddTransactionToUser()</td>
+<td class="success">0.068s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Calcola il totale delle transazioni in entrata usando un filtro</td>
+<td class="success">shouldCalculateTotalForIncomingTransactionsWithFilter()</td>
+<td class="success">0.061s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Crea e recupera un utente</td>
+<td class="success">shouldCreateAndRetrieveUser()</td>
+<td class="success">0.053s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Elimina una transazione senza eliminare l'utente</td>
+<td class="success">shouldDeleteTransactionWithoutDeletingUser()</td>
+<td class="success">0.059s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2025-06-20 19:39:16,139 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.Transaction with reflection
+2025-06-20 19:39:16,141 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag with reflection
+2025-06-20 19:39:16,143 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.filters.tags.PriorityTag with reflection
+2025-06-20 19:39:16,143 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.User with reflection
+2025-06-20 19:39:16,144 [INFO] TableUtils creating table 'Users'
+2025-06-20 19:39:16,147 [DEBUG] BaseJdbcConnectionSource opened connection to jdbc:sqlite:database.db got #1689924104
+2025-06-20 19:39:16,148 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` VARCHAR NOT NULL ,  UNIQUE (`name`)) 
+2025-06-20 19:39:16,148 [INFO] TableUtils creating table 'Transactions'
+2025-06-20 19:39:16,149 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Transactions` (`user_id` INTEGER , `id` INTEGER PRIMARY KEY AUTOINCREMENT , `direction` VARCHAR NOT NULL , `amount` BLOB NOT NULL , `description` VARCHAR NOT NULL , `date` TIMESTAMP NOT NULL ) 
+2025-06-20 19:39:16,149 [INFO] TableUtils creating table 'tags'
+2025-06-20 19:39:16,150 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `tags` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` VARCHAR NOT NULL , `priority` INTEGER NOT NULL ,  UNIQUE (`name`)) 
+2025-06-20 19:39:16,150 [INFO] TableUtils creating table 'transaction_tags'
+2025-06-20 19:39:16,150 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `transaction_tags` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `transaction_id` INTEGER , `tag_id` INTEGER ) 
+2025-06-20 19:39:16,150 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Utenze'
+2025-06-20 19:39:16,151 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Utenze'' with 0 args
+2025-06-20 19:39:16,152 [DEBUG] SelectIterator starting iterator @361380654 for 'SELECT * FROM `tags` WHERE `name` = 'Utenze''
+2025-06-20 19:39:16,152 [DEBUG] SelectIterator closed iterator @361380654 after 1 rows
+2025-06-20 19:39:16,152 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Utenze'' with 0 args returned 1 results
+2025-06-20 19:39:16,153 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Sport'
+2025-06-20 19:39:16,154 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Sport'' with 0 args
+2025-06-20 19:39:16,154 [DEBUG] SelectIterator starting iterator @631673932 for 'SELECT * FROM `tags` WHERE `name` = 'Sport''
+2025-06-20 19:39:16,155 [DEBUG] SelectIterator closed iterator @631673932 after 1 rows
+2025-06-20 19:39:16,155 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Sport'' with 0 args returned 1 results
+2025-06-20 19:39:16,155 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'
+2025-06-20 19:39:16,155 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'' with 0 args
+2025-06-20 19:39:16,156 [DEBUG] SelectIterator starting iterator @1579132337 for 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto''
+2025-06-20 19:39:16,157 [DEBUG] SelectIterator closed iterator @1579132337 after 1 rows
+2025-06-20 19:39:16,157 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'' with 0 args returned 1 results
+2025-06-20 19:39:16,158 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Alimentari'
+2025-06-20 19:39:16,159 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Alimentari'' with 0 args
+2025-06-20 19:39:16,159 [DEBUG] SelectIterator starting iterator @1795225096 for 'SELECT * FROM `tags` WHERE `name` = 'Alimentari''
+2025-06-20 19:39:16,159 [DEBUG] SelectIterator closed iterator @1795225096 after 1 rows
+2025-06-20 19:39:16,160 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Alimentari'' with 0 args returned 1 results
+2025-06-20 19:39:16,161 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'
+2025-06-20 19:39:16,161 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args
+2025-06-20 19:39:16,161 [DEBUG] SelectIterator starting iterator @790094605 for 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento''
+2025-06-20 19:39:16,162 [DEBUG] SelectIterator closed iterator @790094605 after 1 rows
+2025-06-20 19:39:16,163 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args returned 1 results
+2025-06-20 19:39:16,163 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'
+2025-06-20 19:39:16,163 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'' with 0 args
+2025-06-20 19:39:16,164 [DEBUG] SelectIterator starting iterator @1048712791 for 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento''
+2025-06-20 19:39:16,164 [DEBUG] SelectIterator closed iterator @1048712791 after 1 rows
+2025-06-20 19:39:16,164 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'' with 0 args returned 1 results
+2025-06-20 19:39:16,165 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Salute'
+2025-06-20 19:39:16,165 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args
+2025-06-20 19:39:16,166 [DEBUG] SelectIterator starting iterator @487792155 for 'SELECT * FROM `tags` WHERE `name` = 'Salute''
+2025-06-20 19:39:16,166 [DEBUG] SelectIterator closed iterator @487792155 after 1 rows
+2025-06-20 19:39:16,166 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args returned 1 results
+2025-06-20 19:39:16,166 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Viaggi'
+2025-06-20 19:39:16,166 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Viaggi'' with 0 args
+2025-06-20 19:39:16,167 [DEBUG] SelectIterator starting iterator @1909398279 for 'SELECT * FROM `tags` WHERE `name` = 'Viaggi''
+2025-06-20 19:39:16,167 [DEBUG] SelectIterator closed iterator @1909398279 after 1 rows
+2025-06-20 19:39:16,167 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Viaggi'' with 0 args returned 1 results
+2025-06-20 19:39:16,167 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Educazione'
+2025-06-20 19:39:16,167 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Educazione'' with 0 args
+2025-06-20 19:39:16,169 [DEBUG] SelectIterator starting iterator @1632670136 for 'SELECT * FROM `tags` WHERE `name` = 'Educazione''
+2025-06-20 19:39:16,169 [DEBUG] SelectIterator closed iterator @1632670136 after 1 rows
+2025-06-20 19:39:16,170 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Educazione'' with 0 args returned 1 results
+2025-06-20 19:39:16,180 [DEBUG] StatementBuilder built statement DELETE FROM `Transactions`
+2025-06-20 19:39:16,181 [DEBUG] BaseMappedStatement prepared statement 'DELETE FROM `Transactions`' with 0 args
+2025-06-20 19:39:16,204 [DEBUG] StatementBuilder built statement DELETE FROM `Users`
+2025-06-20 19:39:16,205 [DEBUG] BaseMappedStatement prepared statement 'DELETE FROM `Users`' with 0 args
+2025-06-20 19:39:16,220 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Users` (`name` ) VALUES (?)' and 1 args, changed 1 rows
+2025-06-20 19:39:16,220 [DEBUG] BaseMappedStatement assigned id '41' from keyholder to 'id' in User object
+2025-06-20 19:39:16,221 [DEBUG] BaseMappedStatement query-for-id using 'SELECT * FROM `Users` WHERE `id` = ?' and 1 args, got 1 result
+2025-06-20 19:39:16,231 [DEBUG] StatementBuilder built statement DELETE FROM `Transactions`
+2025-06-20 19:39:16,231 [DEBUG] BaseMappedStatement prepared statement 'DELETE FROM `Transactions`' with 0 args
+2025-06-20 19:39:16,236 [DEBUG] StatementBuilder built statement DELETE FROM `Users`
+2025-06-20 19:39:16,237 [DEBUG] BaseMappedStatement prepared statement 'DELETE FROM `Users`' with 0 args
+2025-06-20 19:39:16,251 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Users` (`name` ) VALUES (?)' and 1 args, changed 1 rows
+2025-06-20 19:39:16,252 [DEBUG] BaseMappedStatement assigned id '42' from keyholder to 'id' in User object
+2025-06-20 19:39:16,276 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Transactions` (`user_id` ,`direction` ,`amount` ,`description` ,`date` ) VALUES (?,?,?,?,?)' and 5 args, changed 1 rows
+2025-06-20 19:39:16,276 [DEBUG] BaseMappedStatement assigned id '33' from keyholder to 'id' in Transaction object
+2025-06-20 19:39:16,280 [DEBUG] BaseMappedStatement refresh using 'SELECT * FROM `Users` WHERE `id` = ?' and 1 args, got 1 result
+2025-06-20 19:39:16,280 [DEBUG] StatementBuilder built statement SELECT * FROM `Transactions` WHERE `user_id` = ?
+2025-06-20 19:39:16,281 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Transactions` WHERE `user_id` = ?' with 1 args
+2025-06-20 19:39:16,282 [DEBUG] SelectIterator starting iterator @403547747 for 'SELECT * FROM `Transactions` WHERE `user_id` = ?'
+2025-06-20 19:39:16,283 [DEBUG] SelectIterator closed iterator @403547747 after 0 rows
+2025-06-20 19:39:16,285 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Transactions` WHERE `user_id` = ?' with 1 args
+2025-06-20 19:39:16,286 [DEBUG] SelectIterator starting iterator @923083575 for 'SELECT * FROM `Transactions` WHERE `user_id` = ?'
+2025-06-20 19:39:16,286 [DEBUG] SelectIterator closed iterator @923083575 after 0 rows
+2025-06-20 19:39:16,287 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Transactions` WHERE `user_id` = ?' with 1 args
+2025-06-20 19:39:16,288 [DEBUG] SelectIterator starting iterator @589363823 for 'SELECT * FROM `Transactions` WHERE `user_id` = ?'
+2025-06-20 19:39:16,294 [DEBUG] StatementBuilder built statement SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?
+2025-06-20 19:39:16,295 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args
+2025-06-20 19:39:16,296 [DEBUG] SelectIterator starting iterator @2121995675 for 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?'
+2025-06-20 19:39:16,296 [DEBUG] SelectIterator closed iterator @2121995675 after 0 rows
+2025-06-20 19:39:16,296 [DEBUG] StatementExecutor query of 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args returned 0 results
+2025-06-20 19:39:16,301 [DEBUG] StatementBuilder built statement DELETE FROM `Transactions`
+2025-06-20 19:39:16,303 [DEBUG] BaseMappedStatement prepared statement 'DELETE FROM `Transactions`' with 0 args
+2025-06-20 19:39:16,309 [DEBUG] StatementBuilder built statement DELETE FROM `Users`
+2025-06-20 19:39:16,310 [DEBUG] BaseMappedStatement prepared statement 'DELETE FROM `Users`' with 0 args
+2025-06-20 19:39:16,321 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Users` (`name` ) VALUES (?)' and 1 args, changed 1 rows
+2025-06-20 19:39:16,322 [DEBUG] BaseMappedStatement assigned id '43' from keyholder to 'id' in User object
+2025-06-20 19:39:16,329 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Transactions` (`user_id` ,`direction` ,`amount` ,`description` ,`date` ) VALUES (?,?,?,?,?)' and 5 args, changed 1 rows
+2025-06-20 19:39:16,330 [DEBUG] BaseMappedStatement assigned id '34' from keyholder to 'id' in Transaction object
+2025-06-20 19:39:16,337 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Transactions` (`user_id` ,`direction` ,`amount` ,`description` ,`date` ) VALUES (?,?,?,?,?)' and 5 args, changed 1 rows
+2025-06-20 19:39:16,340 [DEBUG] BaseMappedStatement assigned id '35' from keyholder to 'id' in Transaction object
+2025-06-20 19:39:16,344 [DEBUG] BaseMappedStatement refresh using 'SELECT * FROM `Users` WHERE `id` = ?' and 1 args, got 1 result
+2025-06-20 19:39:16,345 [DEBUG] StatementBuilder built statement SELECT * FROM `Transactions` WHERE `user_id` = ?
+2025-06-20 19:39:16,345 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Transactions` WHERE `user_id` = ?' with 1 args
+2025-06-20 19:39:16,346 [DEBUG] SelectIterator starting iterator @500618423 for 'SELECT * FROM `Transactions` WHERE `user_id` = ?'
+2025-06-20 19:39:16,346 [DEBUG] SelectIterator closed iterator @500618423 after 0 rows
+2025-06-20 19:39:16,354 [DEBUG] BaseMappedStatement delete data with statement 'DELETE FROM `Transactions` WHERE `id` = ?' and 1 args, changed 1 rows
+2025-06-20 19:39:16,355 [DEBUG] BaseMappedStatement refresh using 'SELECT * FROM `Users` WHERE `id` = ?' and 1 args, got 1 result
+2025-06-20 19:39:16,355 [DEBUG] StatementBuilder built statement SELECT * FROM `Transactions` WHERE `user_id` = ?
+2025-06-20 19:39:16,356 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Transactions` WHERE `user_id` = ?' with 1 args
+2025-06-20 19:39:16,357 [DEBUG] SelectIterator starting iterator @1393828949 for 'SELECT * FROM `Transactions` WHERE `user_id` = ?'
+2025-06-20 19:39:16,357 [DEBUG] SelectIterator closed iterator @1393828949 after 0 rows
+2025-06-20 19:39:16,358 [DEBUG] BaseMappedStatement query-for-id using 'SELECT * FROM `Users` WHERE `id` = ?' and 1 args, got 1 result
+2025-06-20 19:39:16,362 [DEBUG] StatementBuilder built statement DELETE FROM `Transactions`
+2025-06-20 19:39:16,362 [DEBUG] BaseMappedStatement prepared statement 'DELETE FROM `Transactions`' with 0 args
+2025-06-20 19:39:16,366 [DEBUG] StatementBuilder built statement DELETE FROM `Users`
+2025-06-20 19:39:16,367 [DEBUG] BaseMappedStatement prepared statement 'DELETE FROM `Users`' with 0 args
+2025-06-20 19:39:16,377 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Users` (`name` ) VALUES (?)' and 1 args, changed 1 rows
+2025-06-20 19:39:16,378 [DEBUG] BaseMappedStatement assigned id '44' from keyholder to 'id' in User object
+2025-06-20 19:39:16,382 [DEBUG] StatementExecutor disabled auto-commit on table Transactions before batch tasks
+2025-06-20 19:39:16,385 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Transactions` (`user_id` ,`direction` ,`amount` ,`description` ,`date` ) VALUES (?,?,?,?,?)' and 5 args, changed 1 rows
+2025-06-20 19:39:16,385 [DEBUG] BaseMappedStatement assigned id '36' from keyholder to 'id' in Transaction object
+2025-06-20 19:39:16,386 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Transactions` (`user_id` ,`direction` ,`amount` ,`description` ,`date` ) VALUES (?,?,?,?,?)' and 5 args, changed 1 rows
+2025-06-20 19:39:16,387 [DEBUG] BaseMappedStatement assigned id '37' from keyholder to 'id' in Transaction object
+2025-06-20 19:39:16,389 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Transactions` (`user_id` ,`direction` ,`amount` ,`description` ,`date` ) VALUES (?,?,?,?,?)' and 5 args, changed 1 rows
+2025-06-20 19:39:16,389 [DEBUG] BaseMappedStatement assigned id '38' from keyholder to 'id' in Transaction object
+2025-06-20 19:39:16,393 [DEBUG] StatementExecutor re-enabled auto-commit on table Transactions after batch tasks
+2025-06-20 19:39:16,394 [DEBUG] BaseMappedStatement refresh using 'SELECT * FROM `Users` WHERE `id` = ?' and 1 args, got 1 result
+2025-06-20 19:39:16,396 [DEBUG] StatementBuilder built statement SELECT * FROM `Transactions` WHERE `user_id` = ?
+2025-06-20 19:39:16,397 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Transactions` WHERE `user_id` = ?' with 1 args
+2025-06-20 19:39:16,397 [DEBUG] SelectIterator starting iterator @146874094 for 'SELECT * FROM `Transactions` WHERE `user_id` = ?'
+2025-06-20 19:39:16,410 [DEBUG] StatementBuilder built statement SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?
+2025-06-20 19:39:16,411 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args
+2025-06-20 19:39:16,412 [DEBUG] SelectIterator starting iterator @710623214 for 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?'
+2025-06-20 19:39:16,412 [DEBUG] SelectIterator closed iterator @710623214 after 0 rows
+2025-06-20 19:39:16,412 [DEBUG] StatementExecutor query of 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args returned 0 results
+2025-06-20 19:39:16,415 [DEBUG] StatementBuilder built statement SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?
+2025-06-20 19:39:16,416 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args
+2025-06-20 19:39:16,416 [DEBUG] SelectIterator starting iterator @859690270 for 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?'
+2025-06-20 19:39:16,417 [DEBUG] SelectIterator closed iterator @859690270 after 0 rows
+2025-06-20 19:39:16,418 [DEBUG] StatementExecutor query of 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args returned 0 results
+2025-06-20 19:39:16,419 [DEBUG] StatementBuilder built statement SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?
+2025-06-20 19:39:16,420 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args
+2025-06-20 19:39:16,420 [DEBUG] SelectIterator starting iterator @1389774257 for 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?'
+2025-06-20 19:39:16,420 [DEBUG] SelectIterator closed iterator @1389774257 after 0 rows
+2025-06-20 19:39:16,420 [DEBUG] StatementExecutor query of 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args returned 0 results
+2025-06-20 19:39:16,421 [DEBUG] SelectIterator closed iterator @146874094 after 3 rows
+2025-06-20 19:39:16,423 [DEBUG] BaseJdbcConnectionSource closed connection #1689924104
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.10</a> at 20 giu 2025, 19:39:17</p>
+</div>
+</div>
+</body>
+</html>

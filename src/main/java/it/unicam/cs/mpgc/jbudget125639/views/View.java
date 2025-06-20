@@ -16,4 +16,5 @@ public interface View {
 
     Collection<Transaction> getFiltered(@NonNull IFilter... filters);
 
+    void removeTransaction(@NonNull Transaction transaction);
 }

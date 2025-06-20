@@ -40,6 +40,11 @@ public class Global extends AbstractView implements ViewsHandler {
     }
 
     @Override
+    public void removeTransaction(Transaction transaction) {
+        views.forEach(view -> view.removeTransaction(transaction));
+    }
+
+    @Override
     public @NonNull Collection<View> getViews() {
         return Stream.concat(views.stream(), Stream.of(this))
                 .collect(Collectors.toSet());

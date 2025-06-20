@@ -6,6 +6,7 @@ import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.RequiresModulesManagerModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.backend.DatabaseModule;
 import it.unicam.cs.mpgc.jbudget125639.views.Global;
 import it.unicam.cs.mpgc.jbudget125639.views.View;
 import lombok.Getter;

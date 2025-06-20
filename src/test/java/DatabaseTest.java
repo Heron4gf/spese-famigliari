@@ -5,7 +5,7 @@ import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
 import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
 import it.unicam.cs.mpgc.jbudget125639.money.Currency;
 import it.unicam.cs.mpgc.jbudget125639.money.MoneyAmount;
-import it.unicam.cs.mpgc.jbudget125639.modules.DatabaseModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.backend.DatabaseModule;
 import org.junit.jupiter.api.*;
 
 import java.io.File;

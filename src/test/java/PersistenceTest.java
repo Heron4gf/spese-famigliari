@@ -2,15 +2,13 @@
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
-import it.unicam.cs.mpgc.jbudget125639.modules.DatabaseModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.backend.DatabaseModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule;
-import it.unicam.cs.mpgc.jbudget125639.modules.JavaFXModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.ModulesHandler;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 
 import it.unicam.cs.mpgc.jbudget125639.money.Currency;
 import it.unicam.cs.mpgc.jbudget125639.money.MoneyAmount;
-import lombok.Cleanup;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

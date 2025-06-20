@@ -1,5 +1,5 @@
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
-import it.unicam.cs.mpgc.jbudget125639.modules.DatabaseModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.backend.DatabaseModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.ModulesHandler;
 import it.unicam.cs.mpgc.jbudget125639.views.Global;

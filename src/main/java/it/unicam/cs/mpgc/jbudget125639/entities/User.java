@@ -32,6 +32,12 @@ public class User extends AbstractView {
     @ForeignCollectionField
     private Collection<Transaction> transactions = new LinkedList<>();
 
+    /**
+     * Calcola l'importo totale delle transazioni dell'utente che soddisfano i filtri specificati.
+     *
+     * @param filters i filtri da applicare per selezionare le transazioni.
+     * @return la somma totale degli importi delle transazioni filtrate.
+     */
     @Override
     public double total(IFilter... filters) {
         return transactions.stream()
@@ -40,11 +46,24 @@ public class User extends AbstractView {
                 .sum();
     }
 
+    /**
+     * Aggiunge una nuova transazione a questo utente e imposta la relazione bidirezionale.
+     *
+     * @param transaction la transazione da aggiungere.
+     * @throws NullPointerException se la transazione è nulla.
+     */
     public void addTransaction(@NonNull Transaction transaction) {
         transactions.add(transaction);
         transaction.setUser(this);
     }
 
+    /**
+     * Restituisce una collezione di transazioni dell'utente che soddisfano i filtri specificati.
+     *
+     * @param filters i filtri da applicare per selezionare le transazioni.
+     * @return una collezione delle transazioni filtrate.
+     * @throws NullPointerException se l'array dei filtri è nullo.
+     */
     @Override
     public Collection<Transaction> getFiltered(@NonNull IFilter... filters) {
         return transactions.stream()
@@ -52,6 +71,12 @@ public class User extends AbstractView {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Rimuove una transazione specifica da questo utente.
+     *
+     * @param transaction la transazione da rimuovere.
+     * @throws NullPointerException se la transazione è nulla.
+     */
     @Override
     public void removeTransaction(@NonNull Transaction transaction) {
         transactions.remove(transaction);

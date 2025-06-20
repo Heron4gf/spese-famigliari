@@ -25,6 +25,14 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(exclude = {"user"})
 public class Transaction {
 
+    /**
+     * Crea una nuova transazione con tutti i dettagli specificati.
+     *
+     * @param direction la direzione della transazione (entrata o uscita).
+     * @param amount l'importo monetario della transazione.
+     * @param description la descrizione testuale della transazione.
+     * @param transactionTags la collezione di tag da associare alla transazione.
+     */
     public Transaction(@NonNull TransactionDirection direction, @NonNull MoneyAmount amount, @NonNull String description, @NonNull Collection<TransactionTag> transactionTags) {
         this(direction, amount, description);
         this.transactionTags = transactionTags;
@@ -62,10 +70,20 @@ public class Transaction {
     @NonNull
     private Collection<TransactionTag> transactionTags = Collections.emptyList();
 
+    /**
+     * Calcola la priorità massima tra tutti i tag associati a questa transazione.
+     *
+     * @return il valore di priorità più alto, o 0 se non ci sono tag.
+     */
     public int maxTagPriority() {
         return getAssociatedTags().mapToInt(Tag::getPriority).max().orElse(0);
     }
 
+    /**
+     * Restituisce uno stream di tutti i tag associati a questa transazione.
+     *
+     * @return uno stream contenente gli oggetti Tag associati.
+     */
     public @NonNull Stream<Tag> getAssociatedTags() {
         return transactionTags.stream().map(TransactionTag::getTag);
     }

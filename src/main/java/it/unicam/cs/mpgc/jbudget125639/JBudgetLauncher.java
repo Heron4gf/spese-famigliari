@@ -2,8 +2,8 @@ package it.unicam.cs.mpgc.jbudget125639;
 
 import it.unicam.cs.mpgc.jbudget125639.modules.*;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
-import it.unicam.cs.mpgc.jbudget125639.modules.backend.DatabaseModule;
-import it.unicam.cs.mpgc.jbudget125639.modules.frontend.JavaFXModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.DatabaseModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.JavaFXModule;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 

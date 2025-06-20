@@ -38,12 +38,15 @@ public class TransactionDialog {
     private final ComboBox<TransactionDirection> directionComboBox;
     private final DatePicker datePicker;
     private final CheckComboBox<NamedTag> tagsField;
-    
+
     @Setter
     private Consumer<TransactionData> onSave;
     @Setter
     private Runnable onCancel;
 
+    /**
+     * Costruisce e inizializza una nuova finestra di dialogo per l'inserimento di una transazione.
+     */
     public TransactionDialog() {
         container = new VBox(20);
         container.getStyleClass().add("dialog-pane");
@@ -96,11 +99,11 @@ public class TransactionDialog {
                 LocalDate date = datePicker.getValue();
 
                 List<NamedTag> selectedTags = tagsField.getCheckModel().getCheckedItems();
-                
+
                 TransactionData data = new TransactionData(
                         description, amount, Currency.EUR, direction, date, selectedTags
                 );
-                
+
                 onSave.accept(data);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -114,6 +117,11 @@ public class TransactionDialog {
         }
     }
 
+    /**
+     * Restituisce il nodo radice della UI del dialogo.
+     *
+     * @return il nodo radice da visualizzare nella scena.
+     */
     public Node getNode() {
         return container;
     }

@@ -24,22 +24,42 @@ public class ServiceFactory {
         return (T) services.computeIfAbsent(serviceClass, k -> factory.get());
     }
     
+    /**
+    * Restituisce l'istanza di ValidationService.
+    * @return ValidationService
+    */
     public ValidationService getValidationService() {
         return getOrCreate(ValidationService.class, ValidationService::new);
     }
     
+    /**
+    * Restituisce l'istanza di DialogService.
+    * @return DialogService
+    */
     public DialogService getDialogService() {
         return getOrCreate(DialogService.class, DialogService::new);
     }
     
+    /**
+     * Restituisce l'istanza di TransactionService.
+     * @return TransactionService
+     */
     public TransactionService getTransactionService() {
-        return getOrCreate(TransactionService.class, () -> new TransactionService(getValidationService()));
+        return getOrCreate(TransactionService.class, () -> new TransactionService(getValidationService(), modulesManager));
     }
     
+    /**
+     * Restituisce l'istanza di UserService.
+     * @return UserService
+     */
     public UserService getUserService() {
         return getOrCreate(UserService.class, () -> new UserService(getValidationService(), modulesManager));
     }
     
+    /**
+     * Crea e restituisce un bundle di servizi.
+     * @return ServiceBundle contenente i servizi
+     */
     public ServiceBundle createServiceBundle() {
         return new ServiceBundle(getDialogService(), getTransactionService(), getUserService());
     }

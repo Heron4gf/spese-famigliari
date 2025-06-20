@@ -10,6 +10,8 @@ import it.unicam.cs.mpgc.jbudget125639.gui.services.validation.ValidationExcepti
 import it.unicam.cs.mpgc.jbudget125639.gui.services.validation.ValidationService;
 import it.unicam.cs.mpgc.jbudget125639.money.Currency;
 import it.unicam.cs.mpgc.jbudget125639.money.MoneyAmount;
+import it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class TransactionService {
     
     private final ValidationService validationService;
+    private final ModulesManager modulesManager;
 
     /**
      * Creates and validates a new transaction with tags.
@@ -64,6 +67,7 @@ public class TransactionService {
     
     /**
      * Adds a transaction to a user after validation.
+     * The actual database saving will be handled by the GlobalModule.
      * 
      * @param user the user to add the transaction to
      * @param transaction the transaction to add
@@ -73,7 +77,17 @@ public class TransactionService {
             throws ValidationException {
         validationService.validateAndReturn(user);
         validationService.validateAndReturn(transaction);
+        
+        // Add transaction to user (sets the user reference)
         user.addTransaction(transaction);
+        
+        // Trigger save state to persist changes including transaction tags
+        try {
+            GlobalModule globalModule = modulesManager.getModule(GlobalModule.class);
+            globalModule.saveState();
+        } catch (Exception e) {
+            throw new ValidationException("Errore durante il salvataggio nel database: " + e.getMessage());
+        }
     }
     
     /**

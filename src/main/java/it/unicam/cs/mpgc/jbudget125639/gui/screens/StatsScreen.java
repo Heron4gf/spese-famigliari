@@ -42,8 +42,6 @@ public class StatsScreen extends AbstractScreen {
     @Override
     public void onActivate() {
         super.onActivate();
-        // Aggiorna sempre i dati quando la schermata diventa attiva
-        // per assicurarsi che le statistiche siano aggiornate
         refreshContent();
     }
     

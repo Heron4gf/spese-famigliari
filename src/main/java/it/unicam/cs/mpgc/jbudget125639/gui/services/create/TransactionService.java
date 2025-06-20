@@ -44,12 +44,10 @@ public class TransactionService {
                 new MoneyAmount(amount, currency)
         );
         
-        // First create the transaction without tags
         Transaction transaction = validationService.validateAndReturn(
                 new Transaction(direction, moneyAmount, description)
         );
         
-        // Then create TransactionTag objects from NamedTags
         Collection<TransactionTag> transactionTags = new ArrayList<>();
         for (NamedTag namedTag : selectedTags) {
             PriorityTag priorityTag = new PriorityTag(namedTag.getName(), namedTag.getPriority());
@@ -57,7 +55,6 @@ public class TransactionService {
             transactionTags.add(transactionTag);
         }
         
-        // Create a new transaction with tags
         Transaction transactionWithTags = validationService.validateAndReturn(
                 new Transaction(direction, moneyAmount, description, transactionTags)
         );

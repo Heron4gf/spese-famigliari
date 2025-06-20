@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static it.unicam.cs.mpgc.jbudget125639.gui.components.HeaderBar.ADD_USER_LABEL;
 
 public class JBudgetApp extends Application {
 
@@ -127,15 +128,20 @@ public class JBudgetApp extends Application {
         this.services = serviceFactory.createServiceBundle();
     }
 
+
     private void onUserChanged(String userName) {
-        if (userName != null && !userName.equals("Aggiungi Utente...")) {
-            View view = modulesManager.getModule(GlobalModule.class).getGlobal().getView(userName);
-            currentView = view;
-            screenManager.setViewer(currentView);
-            updateData();
-        } else if ("Aggiungi Utente...".equals(userName)) {
-            showAddUserDialog();
+        if (userName == null || userName.equals(ADD_USER_LABEL)) {
+            if (ADD_USER_LABEL.equals(userName)) {
+                showAddUserDialog();
+            }
+            return;
         }
+
+        GlobalModule globalModule = modulesManager.getModule(GlobalModule.class);
+        View view = globalModule.getGlobal().getView(userName);
+        currentView = view;
+        screenManager.setViewer(currentView);
+        updateData();
     }
 
     private void onFiltersChanged() {

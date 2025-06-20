@@ -6,27 +6,31 @@ import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
 import it.unicam.cs.mpgc.jbudget125639.filters.dates.TimeSpan;
 import it.unicam.cs.mpgc.jbudget125639.filters.tags.NamedTag;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.ServiceFactory;
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import org.controlsfx.control.CheckComboBox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class HeaderBar {
-    
+
+    public static final String ADD_USER_LABEL = "Aggiungi Utente...";
+    private static final String ALL_DIRECTIONS_LABEL = "Tutte";
+    private static final String ALL_TIMESPAN_LABEL = "Tutto il tempo";
+    private static final String ALL_TAGS_LABEL = "Tutti i tag";
+
     private final HBox container;
-    private final DatePicker datePicker;
+    private final ComboBox<String> timeSpanComboBox;
     private final ComboBox<String> directionComboBox;
-    private final TextField tagsTextField;
+    private final ComboBox<String> tagsComboBox;
     private final ComboBox<String> userComboBox;
     private final ServiceFactory.ServiceBundle services;
 
@@ -43,20 +47,36 @@ public class HeaderBar {
         container.setPadding(new Insets(10, 20, 10, 20));
         container.getStyleClass().add("header");
 
-        datePicker = new DatePicker();
-        datePicker.setPromptText("Filtra per data");
-        datePicker.setOnAction(e -> onFiltersChanged.run());
+        // TimeSpan dropdown for date filtering
+        timeSpanComboBox = new ComboBox<>();
+        timeSpanComboBox.setPromptText("Filtra per periodo");
+        timeSpanComboBox.getItems().add(ALL_TIMESPAN_LABEL);
+        Arrays.stream(TimeSpan.values()).forEach(timeSpan -> 
+            timeSpanComboBox.getItems().add(timeSpan.name())
+        );
+        timeSpanComboBox.setValue(ALL_TIMESPAN_LABEL);
+        timeSpanComboBox.setOnAction(e -> onFiltersChanged.run());
 
+        // TransactionDirection dropdown using enum names
         directionComboBox = new ComboBox<>();
-        directionComboBox.getItems().addAll("Tutte", "IN", "OUT");
-        directionComboBox.setValue("Tutte");
+        directionComboBox.getItems().add(ALL_DIRECTIONS_LABEL);
+        Arrays.stream(TransactionDirection.values()).forEach(direction -> 
+            directionComboBox.getItems().add(direction.name())
+        );
+        directionComboBox.setValue(ALL_DIRECTIONS_LABEL);
         directionComboBox.setOnAction(e -> onFiltersChanged.run());
 
-        tagsTextField = new TextField();
-        tagsTextField.setPromptText("Cerca per tag...");
-        tagsTextField.textProperty().addListener((obs, oldVal, newVal) -> onFiltersChanged.run());
+        // NamedTag dropdown using getName()
+        tagsComboBox = new ComboBox<>();
+        tagsComboBox.setPromptText("Filtra per tag");
+        tagsComboBox.getItems().add(ALL_TAGS_LABEL);
+        Arrays.stream(NamedTag.values()).forEach(namedTag -> 
+            tagsComboBox.getItems().add(namedTag.getName())
+        );
+        tagsComboBox.setValue(ALL_TAGS_LABEL);
+        tagsComboBox.setOnAction(e -> onFiltersChanged.run());
 
-        HBox filtersBox = new HBox(10, datePicker, directionComboBox, tagsTextField);
+        HBox filtersBox = new HBox(10, timeSpanComboBox, directionComboBox, tagsComboBox);
         filtersBox.setAlignment(Pos.CENTER_LEFT);
 
         Region spacer = new Region();
@@ -76,6 +96,7 @@ public class HeaderBar {
         container.getChildren().addAll(filtersBox, spacer, userComboBox);
     }
 
+
     public void refreshUsers() {
         // This method is kept for backward compatibility but now uses updateUserList
         updateUserList(List.of());
@@ -91,7 +112,7 @@ public class HeaderBar {
         userComboBox.getItems().clear();
         userComboBox.getItems().addAll(viewNames);
         userComboBox.getItems().add("");
-        userComboBox.getItems().add("Aggiungi Utente...");
+        userComboBox.getItems().add(ADD_USER_LABEL);
         
         if (!viewNames.isEmpty()) {
             userComboBox.setValue(viewNames.get(0));
@@ -105,29 +126,51 @@ public class HeaderBar {
     public List<IFilter> getCurrentFilters() {
         List<IFilter> filters = new ArrayList<>();
         
-        if (datePicker.getValue() != null) {
-            // Add date filter logic here if needed
+        // TimeSpan filter
+        String selectedTimeSpan = timeSpanComboBox.getValue();
+        if (selectedTimeSpan != null && !ALL_TIMESPAN_LABEL.equals(selectedTimeSpan)) {
+            try {
+                TimeSpan timeSpan = TimeSpan.valueOf(selectedTimeSpan);
+                filters.add(timeSpan);
+            } catch (IllegalArgumentException e) {
+                // Invalid timespan, ignore
+            }
         }
         
+        // TransactionDirection filter using enum
         String direction = directionComboBox.getValue();
-        if (!"Tutte".equals(direction)) {
-            TransactionDirection dir = TransactionDirection.valueOf(direction);
-            filters.add(transaction -> transaction.getDirection() == dir);
+        if (direction != null && !ALL_DIRECTIONS_LABEL.equals(direction)) {
+            try {
+                TransactionDirection dir = TransactionDirection.valueOf(direction);
+                filters.add(dir);
+            } catch (IllegalArgumentException e) {
+                // Invalid direction, ignore
+            }
         }
         
-        String tagText = tagsTextField.getText();
-        if (tagText != null && !tagText.trim().isEmpty()) {
-            filters.add(transaction -> 
-                transaction.getAssociatedTags()
-                    .anyMatch(tag -> tag.toString().toLowerCase().contains(tagText.toLowerCase()))
-            );
+        // NamedTag filter using getName()
+        String selectedTagName = tagsComboBox.getValue();
+        if (selectedTagName != null && !ALL_TAGS_LABEL.equals(selectedTagName)) {
+            NamedTag namedTag = getNamedTagByName(selectedTagName);
+            if (namedTag != null) {
+                filters.add(namedTag);
+            }
         }
         
+        // Use EmptyFilter as default if no filters are applied
         if (filters.isEmpty()) {
-            filters.add(new EmptyFilter());
+            filters.add(new EmptyFilter("No filters applied"));
         }
         
         return filters;
+    }
+
+
+    private NamedTag getNamedTagByName(String name) {
+        return Arrays.stream(NamedTag.values())
+                .filter(namedTag -> namedTag.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public Node getNode() {

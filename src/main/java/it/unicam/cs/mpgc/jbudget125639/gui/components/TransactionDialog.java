@@ -4,7 +4,6 @@ import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
 import it.unicam.cs.mpgc.jbudget125639.filters.tags.NamedTag;
 import it.unicam.cs.mpgc.jbudget125639.money.Currency;
 import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -15,9 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import lombok.Setter;
+import org.controlsfx.control.CheckComboBox;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -37,9 +37,11 @@ public class TransactionDialog {
     private final TextField amountField;
     private final ComboBox<TransactionDirection> directionComboBox;
     private final DatePicker datePicker;
-    private final TextField tagsField;
+    private final CheckComboBox<NamedTag> tagsField;
     
+    @Setter
     private Consumer<TransactionData> onSave;
+    @Setter
     private Runnable onCancel;
 
     public TransactionDialog() {
@@ -58,8 +60,7 @@ public class TransactionDialog {
         amountField = new TextField("0.00");
         directionComboBox = new ComboBox<>(FXCollections.observableArrayList(TransactionDirection.values()));
         datePicker = new DatePicker(LocalDate.now());
-        tagsField = new TextField();
-        tagsField.setPromptText("es: Lavoro, Cibo");
+        tagsField = new CheckComboBox<>(FXCollections.observableArrayList(NamedTag.values()));
 
         formGrid.add(new Label("Descrizione:"), 0, 0);
         formGrid.add(descriptionField, 1, 0);
@@ -93,16 +94,16 @@ public class TransactionDialog {
                 double amount = Double.parseDouble(amountField.getText());
                 TransactionDirection direction = directionComboBox.getValue();
                 LocalDate date = datePicker.getValue();
-                
-                List<NamedTag> tags = parseTagsFromText(tagsField.getText());
+
+                List<NamedTag> selectedTags = tagsField.getCheckModel().getCheckedItems();
                 
                 TransactionData data = new TransactionData(
-                        description, amount, Currency.EUR, direction, date, tags
+                        description, amount, Currency.EUR, direction, date, selectedTags
                 );
                 
                 onSave.accept(data);
             } catch (NumberFormatException e) {
-                // Handle error - could show an alert here
+                e.printStackTrace();
             }
         }
     }
@@ -111,32 +112,6 @@ public class TransactionDialog {
         if (onCancel != null) {
             onCancel.run();
         }
-    }
-
-    private List<NamedTag> parseTagsFromText(String text) {
-        if (text == null || text.trim().isEmpty()) {
-            return List.of();
-        }
-        
-        return Arrays.stream(text.split(","))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .map(tagName -> {
-                    try {
-                        return NamedTag.valueOf(tagName.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        return NamedTag.ALIMENTARI;
-                    }
-                })
-                .collect(java.util.stream.Collectors.toList());
-    }
-
-    public void setOnSave(Consumer<TransactionData> onSave) {
-        this.onSave = onSave;
-    }
-
-    public void setOnCancel(Runnable onCancel) {
-        this.onCancel = onCancel;
     }
 
     public Node getNode() {

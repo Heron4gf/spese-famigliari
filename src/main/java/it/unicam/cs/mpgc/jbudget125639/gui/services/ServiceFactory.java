@@ -7,7 +7,7 @@ import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -17,7 +17,7 @@ public class ServiceFactory {
     @NonNull
     private final ModulesManager modulesManager;
     
-    private final Map<Class<?>, Object> services = new HashMap<>();
+    private final Map<Class<?>, Object> services = new ConcurrentHashMap<>();
     
     @SuppressWarnings("unchecked")
     private <T> T getOrCreate(Class<T> serviceClass, Supplier<T> factory) {

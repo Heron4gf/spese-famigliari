@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.jbudget125639.modules.frontend;
 
-import it.unicam.cs.mpgc.jbudget125639.gui.BudgetApp;
+import it.unicam.cs.mpgc.jbudget125639.gui.JBudgetApp;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.RequiresModulesManagerModule;
 import javafx.application.Application;
@@ -23,10 +23,8 @@ public class JavaFXModule extends RequiresModulesManagerModule {
      */
     @Override
     protected void internalLoad() {
-        BudgetApp.setModulesManager(modulesManager);
-        Application.launch(BudgetApp.class);
-
-
+        JBudgetApp.setModulesManager(modulesManager);
+        Application.launch(JBudgetApp.class);
     }
 
     /**

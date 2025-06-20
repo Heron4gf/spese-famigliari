@@ -1,8 +1,6 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.services;
 
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
-import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
-import it.unicam.cs.mpgc.jbudget125639.gui.constants.UILabel;
 import it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import it.unicam.cs.mpgc.jbudget125639.views.View;
@@ -74,16 +72,5 @@ public class ViewService {
             throw new IllegalStateException("Current view is not a User");
         }
         return (User) current;
-    }
-
-    public String getFormattedBalance() {
-        View current = getCurrentView();
-        double income = current.total(TransactionDirection.IN);
-        double expenses = current.total(TransactionDirection.OUT);
-        return String.format(UILabel.BALANCE_FORMAT.get(), income - expenses);
-    }
-
-    public String getFormattedViewDetails() {
-        return String.format(UILabel.VIEW_DETAILS_FORMAT.get(), getCurrentView().getName());
     }
 }

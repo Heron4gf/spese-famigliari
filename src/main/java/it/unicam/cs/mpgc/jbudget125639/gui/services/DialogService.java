@@ -69,24 +69,4 @@ public class DialogService {
                 .map(String::trim)
                 .filter(name -> !name.isEmpty());
     }
-    
-    /**
-     * Shows a confirmation dialog for deleting a transaction.
-     * 
-     * @return true if user confirmed deletion, false otherwise
-     */
-    public boolean confirmTransactionDeletion() {
-        return showConfirmation(UILabel.DELETE_TRANSACTION_MESSAGE.get());
-    }
-    
-    /**
-     * Shows a confirmation dialog for deleting a view.
-     * 
-     * @param viewName the name of the view to delete
-     * @return true if user confirmed deletion, false otherwise
-     */
-    public boolean confirmViewDeletion(@NonNull String viewName) {
-        String message = String.format(UILabel.DELETE_VIEW_MESSAGE_FORMAT.get(), viewName);
-        return showConfirmation(message);
-    }
 }

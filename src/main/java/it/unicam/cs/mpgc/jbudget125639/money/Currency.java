@@ -2,13 +2,10 @@ package it.unicam.cs.mpgc.jbudget125639.money;
 
 import lombok.RequiredArgsConstructor;
 
-import java.math.BigDecimal;
-
 @RequiredArgsConstructor
 public enum Currency implements ICurrency {
 
-    EUR(new BaseCurrency("Eur", "€")),
-    USD(new BaseCurrency("Dollar", "$"));
+    EUR(new BaseCurrency("Eur", "€"));
 
     private final ICurrency currency;
 

@@ -41,28 +41,4 @@ public class ValidationService {
         
         return object;
     }
-    
-    /**
-     * Validates an object without returning it.
-     * Useful when you only need to check validity.
-     * 
-     * @param object the object to validate
-     * @param <T> the type of the object
-     * @throws ValidationException if validation fails
-     */
-    public <T> void validate(@NonNull T object) throws ValidationException {
-        validateAndReturn(object);
-    }
-    
-    /**
-     * Checks if an object is valid without throwing exceptions.
-     * 
-     * @param object the object to validate
-     * @param <T> the type of the object
-     * @return true if valid, false otherwise
-     */
-    public <T> boolean isValid(@NonNull T object) {
-        Set<ConstraintViolation<T>> violations = validator.validate(object);
-        return violations.isEmpty();
-    }
 }

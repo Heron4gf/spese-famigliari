@@ -18,15 +18,17 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class HeaderBar {
+
+    public static final String ADD_USER_LABEL = "Aggiungi utente...";
 
     @Getter
     private final HBox container = new HBox(20);
@@ -91,7 +93,7 @@ public class HeaderBar {
         }
 
         items.add(""); // Separatore
-        items.add(LabelKey.ADD_USER.label());
+        items.add(ADD_USER_LABEL);
 
         userBox.setItems(items);
     }
@@ -101,11 +103,12 @@ public class HeaderBar {
     }
 
     public List<IFilter> getCurrentFilters() {
-        List<IFilter> filters = Stream.of(
-                        extractEnumFilter(combo(ComboKey.TIMESPAN), LabelKey.ALL_TIMESPAN.label(), TimeSpan::valueOf),
-                        extractEnumFilter(combo(ComboKey.DIRECTION), LabelKey.ALL_DIRECTIONS.label(), TransactionDirection::valueOf),
-                        extractNamedTagFilter(combo(ComboKey.TAGS), LabelKey.ALL_TAGS.label())
-                )
+        List<IFilter> filters = Arrays.stream(FilterSpec.values())
+                .map(spec -> extractEnumFilter(
+                        combo(spec.key()),
+                        spec.allLabel(),
+                        spec.parser()
+                ))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
@@ -118,42 +121,43 @@ public class HeaderBar {
 
     private <E extends IFilter> E extractEnumFilter(ComboBox<String> comboBox, String allLabel, Function<String, E> parser) {
         String value = comboBox.getValue();
-        if (value != null && !value.equals(allLabel)) {
-            try {
-                return parser.apply(value);
-            } catch (IllegalArgumentException ignored) {
-                // valore non valido, restituisce null
-            }
-        }
-        return null;
+        return (value == null || value.equals(allLabel)) ? null :
+                tryCatch(parser, value);
     }
 
-    private NamedTag extractNamedTagFilter(ComboBox<String> comboBox, String allLabel) {
-        String value = comboBox.getValue();
-        if (value != null && !value.equals(allLabel)) {
-            return getNamedTagByName(value);
+    /**
+     * Applica in modo sicuro una funzione che potrebbe lanciare un {@link IllegalArgumentException}.
+     * <p>
+     * Se l'applicazione della funzione ha successo, restituisce il risultato.
+     * In caso contrario (eccezione {@code IllegalArgumentException}), restituisce {@code null}.
+     * <p>
+     * Utile per rendere più leggibile l'applicazione di funzioni enum-based che possono fallire sul parsing.
+     *
+     * @param fn    funzione da applicare
+     * @param input valore di input
+     * @param <T>   tipo dell'input
+     * @param <R>   tipo del risultato atteso
+     * @return il risultato della funzione o {@code null} in caso di eccezione
+     */
+    private <T, R> R tryCatch(Function<T, R> fn, T input) {
+        try {
+            return fn.apply(input);
+        } catch (IllegalArgumentException ignored) {
+            return null;
         }
-        return null;
-    }
-
-
-    private NamedTag getNamedTagByName(String name) {
-        return Arrays.stream(NamedTag.values())
-                .filter(namedTag -> namedTag.getName().equals(name))
-                .findFirst()
-                .orElse(null);
     }
 
     @Accessors(fluent = true)
     @RequiredArgsConstructor
     @Getter
-    public enum LabelKey {
-        ADD_USER("Aggiungi Utente..."),
-        ALL_DIRECTIONS("Tutte"),
-        ALL_TIMESPAN("Tutto il tempo"),
-        ALL_TAGS("Tutti i tag");
+    private enum FilterSpec {
+        TIMESPAN(ComboKey.TIMESPAN, "Tutto il tempo", TimeSpan::valueOf),
+        DIRECTION(ComboKey.DIRECTION, "Tutte", TransactionDirection::valueOf),
+        TAGS(ComboKey.TAGS, "Tutti i tag", NamedTag::valueOf);
 
-        private final String label;
+        private final ComboKey key;
+        private final String allLabel;
+        private final Function<String, ? extends IFilter> parser;
     }
 
 }

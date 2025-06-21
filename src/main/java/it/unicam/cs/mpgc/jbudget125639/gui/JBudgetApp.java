@@ -32,6 +32,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static it.unicam.cs.mpgc.jbudget125639.gui.components.HeaderBar.ADD_USER_LABEL;
+
 public class JBudgetApp extends Application {
 
     @Setter // Facciamo injection del ModulesManager perchè non possiamo passarlo con un costruttore
@@ -132,7 +134,7 @@ public class JBudgetApp extends Application {
             return;
         }
 
-        if (HeaderBar.LabelKey.ADD_USER.label().equals(userName)) {
+        if (ADD_USER_LABEL.equals(userName)) {
             showAddUserDialog();
             return;
         }

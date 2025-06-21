@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
+import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
 import it.unicam.cs.mpgc.jbudget125639.views.AbstractView;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -12,6 +13,9 @@ import lombok.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/*
+ * Classe per rappresentare un utente
+ */
 @EqualsAndHashCode(callSuper = false)
 @Data
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class User extends AbstractView {
 
 
     @ForeignCollectionField
+    @EqualsAndHashCode.Exclude
     private Collection<Transaction> transactions = new LinkedList<>();
 
     /**
@@ -40,9 +45,16 @@ public class User extends AbstractView {
      */
     @Override
     public double total(IFilter... filters) {
-        return transactions.stream()
-                .filter(transaction -> Arrays.stream(filters).allMatch(filter -> filter.pass(transaction)))
-                .mapToDouble(transaction -> transaction.getAmount().getValue())
+        Collection<Transaction> filtered = getFiltered(filters);
+        boolean hasIn = Arrays.asList(filters).contains(TransactionDirection.IN);
+        boolean hasOut = Arrays.asList(filters).contains(TransactionDirection.OUT);
+        boolean adjustSign = (hasIn && hasOut) || (!hasIn && !hasOut);
+
+        return filtered.stream()
+                .mapToDouble(t -> {
+                    double value = t.getAmount().getValue();
+                    return adjustSign && t.getDirection() == TransactionDirection.OUT ? -value : value;
+                })
                 .sum();
     }
 

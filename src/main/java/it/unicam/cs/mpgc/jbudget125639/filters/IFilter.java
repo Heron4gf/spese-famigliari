@@ -1,7 +1,9 @@
 package it.unicam.cs.mpgc.jbudget125639.filters;
 
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
-
+/*
+ * Filtro per le transazioni View#total(IFilter), View#getFiltered(IFilter)
+ */
 public interface IFilter {
 
     /**

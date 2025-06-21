@@ -9,6 +9,9 @@ import lombok.ToString;
 
 import java.util.Date;
 
+/*
+ * Classe astratta filtro per date
+ */
 @Data
 @AllArgsConstructor
 @ToString

@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 
+/*
+ * Classe astratta che rappresenta un Database SQL
+ */
 @RequiredArgsConstructor
 public abstract class SQLDatabase extends AbstractDatabase {
 

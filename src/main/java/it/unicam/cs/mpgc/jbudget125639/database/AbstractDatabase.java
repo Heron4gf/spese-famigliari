@@ -8,11 +8,12 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.sql.SQLException;
-
+/*
+ * Classe astratta per rappresentare un database
+ */
+@Getter
 public abstract class AbstractDatabase implements Database {
 
-    @Getter
-    @NonNull
     protected ConnectionSource connectionSource;
 
     protected abstract String getDatabaseUrl();

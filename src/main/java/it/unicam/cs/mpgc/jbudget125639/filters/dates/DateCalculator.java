@@ -7,6 +7,9 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/*
+ * Classe utility per operazioni sulle date
+ */
 @Data
 @AllArgsConstructor
 public class DateCalculator {

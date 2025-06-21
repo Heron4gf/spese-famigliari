@@ -1,23 +1,13 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.services;
 
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
-import it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
-import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
-import it.unicam.cs.mpgc.jbudget125639.filters.tags.NamedTag;
-import it.unicam.cs.mpgc.jbudget125639.filters.tags.PriorityTag;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.validation.ValidationException;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.validation.ValidationService;
-import it.unicam.cs.mpgc.jbudget125639.money.Currency;
-import it.unicam.cs.mpgc.jbudget125639.money.MoneyAmount;
 import it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class TransactionService {
@@ -26,62 +16,19 @@ public class TransactionService {
     private final ModulesManager modulesManager;
 
     /**
-     * Creates and validates a new transaction with tags.
+     * Aggiunge la transazione all'utente a seguito della validazione
      * 
-     * @param direction the transaction direction
-     * @param amount the monetary amount
-     * @param currency the currency
-     * @param description the transaction description
-     * @param selectedTags the list of selected tags
-     * @return the created and validated transaction with tags
-     * @throws ValidationException if validation fails
-     */
-    public Transaction createTransactionWithTags(
-            @NonNull TransactionDirection direction,
-            double amount,
-            @NonNull Currency currency,
-            @NonNull String description,
-            @NonNull List<NamedTag> selectedTags) throws ValidationException {
-        
-        MoneyAmount moneyAmount = validationService.validateAndReturn(
-                new MoneyAmount(amount, currency)
-        );
-        
-        Transaction transaction = validationService.validateAndReturn(
-                new Transaction(direction, moneyAmount, description)
-        );
-        
-        Collection<TransactionTag> transactionTags = new ArrayList<>();
-        for (NamedTag namedTag : selectedTags) {
-            PriorityTag priorityTag = new PriorityTag(namedTag.getName(), namedTag.getPriority());
-            TransactionTag transactionTag = new TransactionTag(transaction, priorityTag);
-            transactionTags.add(transactionTag);
-        }
-        
-        Transaction transactionWithTags = validationService.validateAndReturn(
-                new Transaction(direction, moneyAmount, description, transactionTags)
-        );
-        
-        return transactionWithTags;
-    }
-    
-    /**
-     * Adds a transaction to a user after validation.
-     * The actual database saving will be handled by the GlobalModule.
-     * 
-     * @param user the user to add the transaction to
-     * @param transaction the transaction to add
-     * @throws ValidationException if validation fails
+     * @param user utente
+     * @param transaction la transazione da aggiungere
+     * @throws ValidationException se invalida (ad esempio trans. con soldi negativi)
      */
     public void addTransactionToUser(@NonNull User user, @NonNull Transaction transaction) 
             throws ValidationException {
+
         validationService.validateAndReturn(user);
         validationService.validateAndReturn(transaction);
-        
-        // Add transaction to user (sets the user reference)
+
         user.addTransaction(transaction);
-        
-        // Trigger save state to persist changes including transaction tags
         try {
             GlobalModule globalModule = modulesManager.getModule(GlobalModule.class);
             globalModule.saveState();
@@ -89,14 +36,5 @@ public class TransactionService {
             throw new ValidationException("Errore durante il salvataggio nel database: " + e.getMessage());
         }
     }
-    
-    /**
-     * Removes a transaction from a user.
-     * 
-     * @param user the user to remove the transaction from
-     * @param transaction the transaction to remove
-     */
-    public void removeTransactionFromUser(@NonNull User user, @NonNull Transaction transaction) {
-        user.removeTransaction(transaction);
-    }
+
 }

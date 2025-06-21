@@ -2,10 +2,9 @@ package it.unicam.cs.mpgc.jbudget125639.gui.screens;
 
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
-import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
-import it.unicam.cs.mpgc.jbudget125639.gui.builders.ComponentBuilderFactory;
-import it.unicam.cs.mpgc.jbudget125639.gui.builders.TransactionDialogBuilder;
-import it.unicam.cs.mpgc.jbudget125639.gui.builders.TransactionGridBuilder;
+import it.unicam.cs.mpgc.jbudget125639.gui.components.ComponentBuilderFactory;
+import it.unicam.cs.mpgc.jbudget125639.gui.components.TransactionDialogComponent;
+import it.unicam.cs.mpgc.jbudget125639.gui.components.TransactionGridComponent;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.ServiceFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
@@ -31,7 +30,7 @@ public class HomeScreen extends AbstractScreen {
     public static final String SCREEN_ID = "home";
     
     private VBox container;
-    private TransactionGridBuilder.TransactionGridComponent transactionGrid;
+    private TransactionGridComponent transactionGrid;
     private Button addButton;
     private Consumer<StackPane> onShowDialog;
     
@@ -121,18 +120,9 @@ public class HomeScreen extends AbstractScreen {
         // Create a holder for the overlay to be used in lambdas
         final StackPane[] overlayHolder = new StackPane[1];
         
-        TransactionDialogBuilder.TransactionDialogComponent dialog = ComponentBuilderFactory.transactionDialog()
-                .withSaveHandler(transactionData -> {
+        TransactionDialogComponent dialog = ComponentBuilderFactory.transactionDialog()
+                .onSave(transaction -> {
                     try {
-                        Transaction transaction = services.transactionService.createTransactionWithTags(
-                                transactionData.direction(),
-                                transactionData.amount(),
-                                transactionData.currency(),
-                                transactionData.description(),
-                                transactionData.tags()
-                        );
-                        
-                        // Cast View to User since TransactionService expects User
                         if (currentView instanceof User user) {
                             services.transactionService.addTransactionToUser(user, transaction);
                         } else {
@@ -144,7 +134,7 @@ public class HomeScreen extends AbstractScreen {
                         services.dialogService.showError("Errore durante il salvataggio: " + e.getMessage());
                     }
                 })
-                .withCancelHandler(() -> closeDialog(overlayHolder[0]))
+                .onCancel(() -> closeDialog(overlayHolder[0]))
                 .build();
         
         StackPane overlay = createDialogOverlay(dialog.getNode());

@@ -5,6 +5,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
+import it.unicam.cs.mpgc.jbudget125639.filters.tags.NamedTag;
+import it.unicam.cs.mpgc.jbudget125639.filters.tags.PriorityTag;
 import it.unicam.cs.mpgc.jbudget125639.filters.tags.Tag;
 import it.unicam.cs.mpgc.jbudget125639.money.MoneyAmount;
 import jakarta.validation.constraints.NotBlank;
@@ -12,9 +14,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter
@@ -22,7 +23,7 @@ import java.util.stream.Stream;
 @DatabaseTable(tableName = "Transactions")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @ToString
-@EqualsAndHashCode(exclude = {"user"})
+@EqualsAndHashCode
 public class Transaction {
 
     /**
@@ -31,11 +32,32 @@ public class Transaction {
      * @param direction la direzione della transazione (entrata o uscita).
      * @param amount l'importo monetario della transazione.
      * @param description la descrizione testuale della transazione.
-     * @param transactionTags la collezione di tag da associare alla transazione.
+     * @param tags la collezione di tag da associare alla transazione.
      */
-    public Transaction(@NonNull TransactionDirection direction, @NonNull MoneyAmount amount, @NonNull String description, @NonNull Collection<TransactionTag> transactionTags) {
+    public Transaction(@NonNull TransactionDirection direction, @NonNull MoneyAmount amount, @NonNull String description, @NonNull Collection<PriorityTag> tags) {
         this(direction, amount, description);
-        this.transactionTags = transactionTags;
+
+        this.transactionTags = tags.stream()
+                .map(tag -> new TransactionTag(this, tag))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Crea una nuova transazione con tutti i dettagli specificati.
+     *
+     * @param direction la direzione della transazione (entrata o uscita).
+     * @param moneyAmount l'importo monetario della transazione.
+     * @param description la descrizione testuale della transazione.
+     * @param date la data della transazione (anche futura)
+     * @param selectedTags la collezione di tag da associare alla transazione.
+     */
+    public Transaction(String description, MoneyAmount moneyAmount, TransactionDirection direction, Date date, List<NamedTag> selectedTags) {
+        this(direction, moneyAmount, description);
+        this.date = date;
+
+        this.transactionTags = selectedTags.stream()
+                .map(tag -> new TransactionTag(this, tag.asPriorityTag()))
+                .collect(Collectors.toList());
     }
 
     @ToString.Exclude
@@ -68,6 +90,7 @@ public class Transaction {
 
     @ForeignCollectionField(eager = true)
     @NonNull
+    @EqualsAndHashCode.Exclude
     private Collection<TransactionTag> transactionTags = Collections.emptyList();
 
     /**

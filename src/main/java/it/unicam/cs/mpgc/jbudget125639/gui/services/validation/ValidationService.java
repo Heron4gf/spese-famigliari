@@ -10,9 +10,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Service responsible for object validation using Bean Validation.
- * Follows Single Responsibility Principle by handling only validation concerns.
- * Uses exceptions as the primary mechanism for reporting validation failures.
+ * Servizio responsabile della validazione degli oggetti usando Bean Validation.
+ * Segue il Principio di Responsabilità Unica occupandosi solo degli aspetti legati alla validazione.
+ * Utilizza le eccezioni come meccanismo principale per segnalare i fallimenti di validazione.
  */
 public class ValidationService {
     
@@ -23,14 +23,14 @@ public class ValidationService {
             this.validator = factory.getValidator();
         }
     }
-    
+
     /**
-     * Validates an object and throws exception if validation fails.
-     * 
-     * @param object the object to validate
-     * @param <T> the type of the object
-     * @return the validated object
-     * @throws ValidationException if validation fails
+     * Valida un oggetto e lancia un'eccezione se la validazione fallisce.
+     *
+     * @param object l’oggetto da validare
+     * @param <T> il tipo dell’oggetto
+     * @return l’oggetto validato
+     * @throws ValidationException se la validazione fallisce
      */
     public <T> T validateAndReturn(@NonNull T object) throws ValidationException {
         Set<ConstraintViolation<T>> violations = validator.validate(object);

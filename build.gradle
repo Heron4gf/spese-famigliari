@@ -69,18 +69,3 @@ jlink {
 jlinkZip {
     group = 'distribution'
 }
-
-
-task runGuiDemo(type: JavaExec) {
-    group = "Verification"
-    description = "Lancia la demo visuale della GUI"
-
-    classpath = sourceSets.test.runtimeClasspath
-
-    mainClass = 'it.unicam.cs.mpgc.jbudget125639.gui.TestGUI'
-
-    jvmArgs = [
-            '--module-path', configurations.testRuntimeClasspath.asPath,
-            '--add-modules', javafx.modules.join(',')
-    ]
-}

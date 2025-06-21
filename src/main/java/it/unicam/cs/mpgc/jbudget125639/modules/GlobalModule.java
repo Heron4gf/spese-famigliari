@@ -11,7 +11,6 @@ import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.RequiresModulesManagerM
 import it.unicam.cs.mpgc.jbudget125639.views.Global;
 import it.unicam.cs.mpgc.jbudget125639.views.View;
 import lombok.Getter;
-import lombok.SneakyThrows;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -58,45 +57,48 @@ public class GlobalModule extends RequiresModulesManagerModule {
         Dao<User, ?> userDao = database.getDao(User.class);
         Dao<Transaction, ?> transactionDao = database.getDao(Transaction.class);
         Dao<TransactionTag, ?> transactionTagDao = database.getDao(TransactionTag.class);
-        Dao<PriorityTag, ?> priorityTagDao = database.getDao(PriorityTag.class);
+        Dao<PriorityTag, ?> tagDao = database.getDao(PriorityTag.class);
 
         global.getViews().stream()
                 .filter(User.class::isInstance)
                 .map(User.class::cast)
-                .forEach(user -> saveUser(userDao, transactionDao, transactionTagDao, priorityTagDao, user));
+                .forEach(user -> {
+                    try {
+                        saveUser(userDao, transactionDao, transactionTagDao, tagDao, user);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
-    @SneakyThrows
-    private void saveUser(Dao<User, ?> userDao, Dao<Transaction, ?> transactionDao, 
-                         Dao<TransactionTag, ?> transactionTagDao, Dao<PriorityTag, ?> priorityTagDao, User user) {
+    private void saveUser(Dao<User, ?> userDao, Dao<Transaction, ?> transactionDao, Dao<TransactionTag, ?> transactionTagDao, Dao<PriorityTag, ?> tagDao, User user) throws SQLException {
         userDao.createOrUpdate(user);
-        user.getTransactions().forEach(transaction -> {
-            try {
-                transactionDao.createOrUpdate(transaction);
-                
-                // Save transaction tags
-                for (TransactionTag transactionTag : transaction.getTransactionTags()) {
-                    // Ensure the PriorityTag exists in database
-                    PriorityTag priorityTag = transactionTag.getTag();
-                    List<PriorityTag> existingTags = priorityTagDao.queryForEq("name", priorityTag.getName());
-                    
-                    if (existingTags.isEmpty()) {
-                        // Create new tag if it doesn't exist
-                        priorityTagDao.createOrUpdate(priorityTag);
-                    } else {
-                        // Use existing tag from database
-                        priorityTag = existingTags.get(0);
-                        transactionTag = new TransactionTag(transaction, priorityTag);
-                    }
-                    
-                    // Save the transaction tag relationship
-                    transactionTagDao.createOrUpdate(transactionTag);
-                }
-                
-            } catch (SQLException e) {
-                throw new RuntimeException("Errore durante il salvataggio della transazione e dei suoi tag", e);
+
+        for (Transaction transaction : user.getTransactions()) {
+            transactionDao.createOrUpdate(transaction);
+
+            for (TransactionTag transactionTag : transaction.getTransactionTags()) {
+                PriorityTag persistedTag = getOrCreateTag(tagDao, transactionTag.getTag());
+                transactionTag.setTransaction(transaction);
+                transactionTag.setTag(persistedTag);
+                transactionTagDao.createOrUpdate(transactionTag);
             }
-        });
+        }
+    }
+
+    private PriorityTag getOrCreateTag(Dao<PriorityTag, ?> tagDao, PriorityTag tag) {
+        try {
+            PriorityTag existing = tagDao.queryBuilder().where().eq("name", tag.getName()).queryForFirst();
+            if (existing != null) {
+                return existing;
+            }
+
+            tagDao.create(tag);
+            return tag;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while saving or retrieving tag: " + tag.getName(), e);
+        }
     }
 
 

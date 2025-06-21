@@ -3,10 +3,10 @@ package it.unicam.cs.mpgc.jbudget125639.gui;
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
-import it.unicam.cs.mpgc.jbudget125639.gui.builders.BalanceBoxBuilder;
-import it.unicam.cs.mpgc.jbudget125639.gui.builders.ComponentBuilderFactory;
-import it.unicam.cs.mpgc.jbudget125639.gui.builders.HeaderBarBuilder;
-import it.unicam.cs.mpgc.jbudget125639.gui.builders.NavigationBarBuilder;
+import it.unicam.cs.mpgc.jbudget125639.gui.components.BalanceBoxComponent;
+import it.unicam.cs.mpgc.jbudget125639.gui.components.ComponentBuilderFactory;
+import it.unicam.cs.mpgc.jbudget125639.gui.components.HeaderBarComponent;
+import it.unicam.cs.mpgc.jbudget125639.gui.components.NavigationBarComponent;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.HomeScreen;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.ScreenManager;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.StatsScreen;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static it.unicam.cs.mpgc.jbudget125639.gui.builders.HeaderBarBuilder.HeaderBarComponent.ADD_USER_LABEL;
+import static it.unicam.cs.mpgc.jbudget125639.gui.components.HeaderBarComponent.ADD_USER_LABEL;
 
 public class JBudgetApp extends Application {
 
@@ -48,9 +48,9 @@ public class JBudgetApp extends Application {
 
     private View currentView;
     
-    private HeaderBarBuilder.HeaderBarComponent headerBar;
-    private BalanceBoxBuilder.BalanceBoxComponent balanceBox;
-    private NavigationBarBuilder.NavigationBarComponent navigationBar;
+    private HeaderBarComponent headerBar;
+    private BalanceBoxComponent balanceBox;
+    private NavigationBarComponent navigationBar;
     private HomeScreen homeScreen;
     private StatsScreen statsScreen;
 
@@ -79,9 +79,9 @@ public class JBudgetApp extends Application {
         root.getStyleClass().add("root");
 
         headerBar = ComponentBuilderFactory.headerBar()
-                .withUserChangeHandler(this::onUserChanged)
-                .withFiltersChangeHandler(this::onFiltersChanged)
-                .withModulesManager(modulesManager)
+                .onUserChanged(this::onUserChanged)
+                .onFiltersChanged(this::onFiltersChanged)
+                .modulesManager(modulesManager)
                 .build();
         root.setTop(headerBar.getNode());
 
@@ -104,7 +104,7 @@ public class JBudgetApp extends Application {
         StackPane screensContainer = new StackPane();
         screenManager = new ScreenManager(screensContainer);
         navigationBar = ComponentBuilderFactory.navigationBar()
-                .withScreenManager(screenManager)
+                .screenManager(screenManager)
                 .build();
 
         VBox.setVgrow(screensContainer, Priority.ALWAYS);

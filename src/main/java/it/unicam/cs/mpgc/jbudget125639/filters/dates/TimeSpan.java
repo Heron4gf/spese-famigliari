@@ -21,7 +21,7 @@ public enum TimeSpan implements IFilter {
     ONE_YEAR(new DefinedTimeSpan(365, TimeUnit.DAYS)),
     EVER(new DefinedTimeSpan(Integer.MAX_VALUE, TimeUnit.DAYS));
 
-    private DateFilter dateFilter;
+    private final DateFilter dateFilter;
 
     /**
      * Verifica se la transazione specificata rientra nell'intervallo temporale di questo filtro.
@@ -32,10 +32,6 @@ public enum TimeSpan implements IFilter {
     @Override
     public boolean pass(Transaction transaction) {
         return dateFilter.pass(transaction);
-    }
-
-    public static DateFilter of(int amount, @NonNull TimeUnit timeUnit) {
-        return new DefinedTimeSpan(amount, timeUnit);
     }
 
     protected static class DefinedTimeSpan extends AfterDate {

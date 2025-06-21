@@ -5,6 +5,9 @@ import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.RequiresModulesManagerModule;
 import javafx.application.Application;
 
+/*
+ * modulo che avvia l'applicazione frontend JavaFX
+ */
 public class JavaFXModule extends RequiresModulesManagerModule {
 
     public JavaFXModule(ModulesManager modulesManager) {

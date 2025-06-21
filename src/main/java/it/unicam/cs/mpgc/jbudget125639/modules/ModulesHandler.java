@@ -10,6 +10,9 @@ import lombok.extern.java.Log;
 import java.util.*;
 import java.util.stream.Stream;
 
+/*
+ * gestore dei moduli
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Log

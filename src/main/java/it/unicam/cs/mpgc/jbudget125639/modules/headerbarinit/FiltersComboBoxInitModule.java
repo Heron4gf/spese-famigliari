@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
+/*
+ * modulo per definire i filtri delle combobox con azioni, label e nomi
+ */
 @RequiredArgsConstructor
 public class FiltersComboBoxInitModule extends AbstractModule {
 

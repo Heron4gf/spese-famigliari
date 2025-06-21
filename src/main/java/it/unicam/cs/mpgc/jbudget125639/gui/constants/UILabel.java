@@ -1,8 +1,6 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.constants;
 
 public enum UILabel {
-
-    // Messages
     ERROR_TITLE("Errore"),
     ERROR_HEADER("Si è verificato un errore"),
     CONFIRMATION_TITLE("Conferma"),

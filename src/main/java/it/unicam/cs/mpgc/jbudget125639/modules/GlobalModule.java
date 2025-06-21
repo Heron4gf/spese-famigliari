@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/*
+ * gestore viste e dati
+ */
 @Getter
 public class GlobalModule extends RequiresModulesManagerModule {
 

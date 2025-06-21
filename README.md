@@ -21,6 +21,10 @@ Fornisce grafici a torta e a barre per l'analisi delle spese per categoria e per
 ### Gestione Multi-Utente
 Supporta la creazione e gestione di utenti multipli con viste separate e aggregate. Ogni utente mantiene le proprie transazioni con possibilità di vista globale.
 
+#### Attenzione: l'utente Global è un aggregatore di utenti, per aggiungere una transazione è necessario avere un utente valido selezionato.
+è possibile cambiare utente con il pulsante in alto a destra.
+![user_gui.png](user_gui.png)
+
 # Responsabilità
 
 ## Gestione delle Entità di Dominio
@@ -30,19 +34,33 @@ Le entità principali sono rappresentate dalle classi `Transaction`, `User` e `T
 La persistenza è gestita attraverso un'architettura ORM basata su ORMLite con database SQLite. La classe `SQLiteDatabase` implementa l'interfaccia `Database` fornendo accesso ai DAO con lazy loading e caching. Il `DatabaseModule` si occupa dell'inizializzazione del database e della registrazione delle entità. La struttura dati garantisce integrità referenziale e supporta transazioni ACID.
 
 ## Interfaccia Utente e Presentazione
-L'interfaccia grafica è coordinata dalla classe `JBudgetApp` che inizializza l'applicazione JavaFX. Il `ScreenManager` gestisce la navigazione tra le diverse schermate (`HomeScreen`, `StatsScreen`) implementando il pattern Template Method attraverso `AbstractScreen`. I componenti UI (`TransactionGrid`, `TransactionDialog`, `BalanceBox`, `HeaderBar`, `NavigationBar`, `StatsView`) forniscono elementi riutilizzabili con responsabilità specifiche per la visualizzazione e interazione.
+L'interfaccia grafica è coordinata dalla classe `JBudgetApp` che inizializza l'applicazione JavaFX. Il `ScreenManager` gestisce la navigazione tra le diverse schermate (`HomeScreen`, `StatsScreen`) implementando il pattern Template Method attraverso `AbstractScreen`. I componenti UI (`TransactionGridComponent`, `TransactionDialogComponent`, `BalanceBoxComponent`, `HeaderBarComponent`, `NavigationBarComponent`, `StatsViewComponent`) forniscono il rispettivo builder per costruire i componenti più adatti.
 
 ## Logica di Business e Servizi
 I servizi di business sono centralizzati nel `ServiceFactory` che implementa il pattern Factory per la gestione delle dipendenze. `TransactionService` e `UserService` gestiscono le operazioni CRUD e la logica di business specifica. `ValidationService` fornisce validazione centralizzata utilizzando Bean Validation, mentre `DialogService` gestisce le interazioni modali con l'utente.
 
 ## Sistema di Filtri e Viste
-Il sistema di filtri è basato sull'interfaccia `IFilter` con implementazioni specifiche per date (`DateFilter`, `AfterDate`, `BeforeDate`) e tag (`NamedTag`, `PriorityTag`). Le classi di filtro supportano la composizione tramite Chain of Responsibility. L'interfaccia `View` definisce il contratto per le viste dei dati con metodi di filtraggio e aggregazione.
+Il sistema di filtri è basato sull'interfaccia `IFilter` con implementazioni specifiche per date `TimeSpan` (`DateFilter`, `AfterDate`, `BeforeDate`) e `Tag` (`NamedTag`, `PriorityTag`). Le classi di filtro supportano la composizione tramite Chain of Responsibility. L'interfaccia `View` definisce il contratto per le viste dei dati con metodi di filtraggio e aggregazione.
 
 ## Architettura Modulare
 L'applicazione utilizza un'architettura modulare basata sull'interfaccia `Module` gestita dal `ModulesManager`. I moduli principali includono `DatabaseModule` per la persistenza, `JavaFXModule` per l'interfaccia grafica e `GlobalModule` per la configurazione globale. Ogni modulo gestisce il proprio ciclo di vita con metodi di caricamento e scaricamento.
 
 ## Gestione Valute e Importi Monetari
 La gestione degli importi monetari è affidata alle classi `MoneyAmount`, `Currency` e `ICurrency`. `MoneyAmount` incapsula valore e valuta garantendo integrità e validazione. `BaseCurrency` fornisce implementazioni per valute comuni con supporto per serializzazione e persistenza.
+#### Contratti e controllo input
+Per la gestione dei contratti e validazione dell'input il programma sfrutta la libreria Jakarta Validation e Hibernate che permettono di definire delle annotazioni per il controllo sugli attributi e variabili e per ciascuno un messaggio di errore comprensibile da inviare all'utente.
+```java
+...
+
+public class MoneyAmount implements Serializable {
+
+    @Positive(message = "Il valore deve essere positivo.") // controlli sull'input con jakarta validation e hibernate
+    @Digits(integer = 20, fraction = 2, message = "Il numero deve avere al massimo 20 cifre intere e 2 decimali.")
+    private final Double value;
+    
+    ...
+```
+
 
 # Avvio del Progetto
 
@@ -53,12 +71,7 @@ gradle build
 gradle run
 ```
 
-L'applicazione richiede Java 11 o superiore e utilizza JavaFX per l'interfaccia grafica. Il database SQLite viene creato automaticamente nel file `database.db` nella directory di lavoro.
-
-## Requisiti di Sistema
-- Java 11+
-- JavaFX (incluso nelle dipendenze Gradle)
-- Sistema operativo: Windows, macOS, Linux
+L'applicazione richiede Java 21 o superiore e utilizza JavaFX per l'interfaccia grafica. Il database SQLite viene creato automaticamente nel file `database.db` nella directory di lavoro.
 
 ## Struttura del Progetto
 Il progetto segue la struttura standard Gradle con codice sorgente in `src/main/java` e risorse in `src/main/resources`. Il file `build.gradle` definisce le dipendenze e la configurazione di build.
@@ -69,8 +82,11 @@ Il progetto segue la struttura standard Gradle con codice sorgente in `src/main/
 Il sistema utilizza SQLite come database embedded con ORMLite per il mapping oggetto-relazionale. La struttura include tre tabelle principali:
 
 - **Users**: Gestione utenti con nome univoco
+![user_db](user_db.png)
 - **Transactions**: Movimenti finanziari con riferimento all'utente
+![transaction_db](transaction_db.png)
 - **TransactionTags**: Associazione many-to-many tra transazioni e tag
+![transaction_tags](transaction_tags_db.png)
 
 ## Mapping Entità-Relazioni
 Le relazioni sono gestite tramite annotazioni ORMLite con foreign keys e collezioni. `MoneyAmount` è serializzato come BLOB per mantenere l'integrità tra importo e valuta. Le transazioni database garantiscono consistenza dei dati.
@@ -82,6 +98,7 @@ Implementato lazy loading per i DAO con caching per ottimizzare le performance. 
 
 ## Estensione Modulare
 L'architettura modulare permette l'aggiunta di nuovi moduli implementando l'interfaccia `Module`. Ogni modulo gestisce il proprio ciclo di vita e può registrare servizi e componenti. Il `ModulesManager` coordina il caricamento e la gestione delle dipendenze tra moduli.
+Sono inoltre disponibili astrazioni come `AbstractModule` e `RequiresModuleManagerModule` per velocizzare l'implementazione
 
 ## Sistema di Servizi Estensibile
 Il `ServiceFactory` utilizza il pattern Factory per la creazione di servizi con dependency injection. Nuovi servizi possono essere aggiunti estendendo la factory e implementando le interfacce di contratto. La validazione è centralizzata e riutilizzabile.

@@ -6,7 +6,9 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import lombok.RequiredArgsConstructor;
 
-
+/*
+ * Modulo inizializzazione container
+ */
 @RequiredArgsConstructor
 public class InitContainerModule extends AbstractModule {
 
@@ -26,6 +28,6 @@ public class InitContainerModule extends AbstractModule {
 
     @Override
     public String name() {
-        return "";
+        return "InitContainer";
     }
 }

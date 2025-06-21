@@ -17,6 +17,9 @@ import java.util.Arrays;
 
 @NoArgsConstructor
 @AllArgsConstructor
+/*
+ * Gestore del Database
+ */
 public class DatabaseModule extends AbstractModule {
     private final File DATABASE_FILE = new File("database.db");
 
@@ -39,6 +42,9 @@ public class DatabaseModule extends AbstractModule {
         database.unload();
     }
 
+    /*
+     * creiamo i tag
+     */
     private void createDefaultTags() throws Exception {
         Dao<PriorityTag, ?> tagDao = database.getDao(PriorityTag.class);
         Arrays.stream(NamedTag.values())
@@ -46,6 +52,9 @@ public class DatabaseModule extends AbstractModule {
                 .forEach(tag -> createTagIfNotExists(tagDao, tag));
     }
 
+    /*
+     * creazione tag
+     */
     private void createTagIfNotExists(Dao<PriorityTag, ?> dao, PriorityTag tag) {
         try {
             if (dao.queryForEq("name", tag.getName()).isEmpty()) {

@@ -2,6 +2,9 @@ package it.unicam.cs.mpgc.jbudget125639.money;
 
 import lombok.RequiredArgsConstructor;
 
+/*
+ * enum che contiene le currency, supportato solo l'euro per ora
+ */
 @RequiredArgsConstructor
 public enum Currency implements ICurrency {
 

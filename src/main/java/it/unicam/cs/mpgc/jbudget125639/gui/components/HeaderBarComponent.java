@@ -10,7 +10,7 @@ import it.unicam.cs.mpgc.jbudget125639.gui.builders.NodeBuilder;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import it.unicam.cs.mpgc.jbudget125639.modules.headerbarinit.FiltersComboBoxInitModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.headerbarinit.InitContainerModule;
-import it.unicam.cs.mpgc.jbudget125639.modules.headerbarinit.UserChangedConsumerModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.headerbarinit.UserListenerRegister;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -66,7 +66,7 @@ public class HeaderBarComponent implements NodeBuilder {
                         combo(ComboKey.TAGS),
                         onFiltersChanged
                 ),
-                new UserChangedConsumerModule(
+                new UserListenerRegister(
                         onUserChanged,
                         combo(ComboKey.USER)
                 )

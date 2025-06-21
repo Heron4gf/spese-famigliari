@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class MoneyAmount implements Serializable {
 
     @NonNull
-    @Positive(message = "Il valore deve essere positivo.")
+    @Positive(message = "Il valore deve essere positivo.") // controlli sull'input con jakarta validation e hibernate
     @Digits(integer = 20, fraction = 2, message = "Il numero deve avere al massimo 20 cifre intere e 2 decimali.")
     private final Double value;
 

@@ -8,42 +8,46 @@ import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Servizio per la gestione degli utenti.
+ * Fornisce metodi per creare, validare e aggiungere utenti al modulo globale.
+ */
 @RequiredArgsConstructor
 public class UserService {
-    
+
     private final ValidationService validationService;
     private final ModulesManager modulesManager;
-    
+
     /**
-     * Creates and validates a new user.
-     * 
-     * @param name the user name
-     * @return the created and validated user
-     * @throws ValidationException if validation fails
+     * Crea e valida un nuovo utente.
+     *
+     * @param name il nome dell'utente
+     * @return l'utente creato e validato
+     * @throws ValidationException se la validazione fallisce
      */
     public User createUser(@NonNull String name) throws ValidationException {
         String trimmedName = name.trim();
         User user = validationService.validateAndReturn(new User(trimmedName));
         return user;
     }
-    
+
     /**
-     * Adds a user to the global module.
-     * 
-     * @param user the user to add
-     * @throws ValidationException if validation fails
+     * Aggiunge un utente al modulo globale.
+     *
+     * @param user l'utente da aggiungere
+     * @throws ValidationException se la validazione fallisce
      */
     public void addUserToGlobal(@NonNull User user) throws ValidationException {
         validationService.validateAndReturn(user);
         modulesManager.getModule(GlobalModule.class).getGlobal().addView(user);
     }
-    
+
     /**
-     * Creates a new user and adds it to the global module.
-     * 
-     * @param name the user name
-     * @return the created user
-     * @throws ValidationException if validation fails
+     * Crea un nuovo utente e lo aggiunge al modulo globale.
+     *
+     * @param name il nome dell'utente
+     * @return l'utente creato
+     * @throws ValidationException se la validazione fallisce
      */
     public User createAndAddUser(@NonNull String name) throws ValidationException {
         User user = createUser(name);

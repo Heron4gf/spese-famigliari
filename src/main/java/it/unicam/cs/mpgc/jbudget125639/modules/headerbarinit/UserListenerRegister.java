@@ -8,8 +8,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
+/*
+ * registra i listener per il cambio utente
+ */
 @RequiredArgsConstructor
-public class UserChangedConsumerModule extends AbstractModule {
+public class UserListenerRegister extends AbstractModule {
 
     private final Consumer<String> onUserChanged;
     private final ComboBox<String> userComboBox;
@@ -39,6 +42,6 @@ public class UserChangedConsumerModule extends AbstractModule {
 
     @Override
     public String name() {
-        return "UserChangedConsumerModule";
+        return "UserListenerRegister";
     }
 }

@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.jbudget125639.gui.screens;
 import it.unicam.cs.mpgc.jbudget125639.gui.builders.ComponentBuilderFactory;
 import it.unicam.cs.mpgc.jbudget125639.gui.builders.StatsViewBuilder;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.ServiceFactory;
+import it.unicam.cs.mpgc.jbudget125639.views.View;
 import javafx.scene.Node;
 
 /**
@@ -30,13 +31,15 @@ public class StatsScreen extends AbstractScreen {
     
     @Override
     protected void createContent() {
-        statsView = ComponentBuilderFactory.statsView().build();
+        statsView = ComponentBuilderFactory.statsView()
+                .withView(currentView)
+                .build();
     }
     
     @Override
     protected void refreshContent() {
         if (currentView != null) {
-            statsView.updateData(currentView.getFiltered());
+            statsView.updateData(currentView);
         }
     }
     
@@ -47,11 +50,18 @@ public class StatsScreen extends AbstractScreen {
     }
     
     /**
-     * Aggiorna le statistiche con transazioni filtrate.
-     * 
-     * @param filteredTransactions le transazioni filtrate da analizzare
+     * Aggiorna le statistiche
      */
-    public void updateStats(java.util.Collection<it.unicam.cs.mpgc.jbudget125639.entities.Transaction> filteredTransactions) {
-        statsView.updateData(filteredTransactions);
+    public void updateStats() {
+        statsView.updateData();
+    }
+    
+    /**
+     * Aggiorna le statistiche con una nuova vista
+     * 
+     * @param view la vista da utilizzare
+     */
+    public void updateStats(View view) {
+        statsView.updateData(view);
     }
 }

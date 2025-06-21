@@ -1,9 +1,9 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.builders;
 
-import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
+import it.unicam.cs.mpgc.jbudget125639.filters.tags.NamedTag;
+import it.unicam.cs.mpgc.jbudget125639.views.View;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -14,8 +14,6 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,26 +21,27 @@ import static it.unicam.cs.mpgc.jbudget125639.gui.builders.BuilderUtils.createSe
 import static it.unicam.cs.mpgc.jbudget125639.gui.builders.BuilderUtils.createStyledVBox;
 
 /**
- * Builder for creating StatsView components with optional initial data.
+ * Builder for creating StatsView components that uses View methods for filtering and calculations.
  */
 public class StatsViewBuilder implements ComponentBuilder<StatsViewBuilder.StatsViewComponent, StatsViewBuilder> {
 
-    private Collection<Transaction> initialData;
+    private View view;
 
     /**
-     * Sets the initial transaction data to display in the statistics.
+     * Sets the view to use for getting filtered transactions and totals.
      *
-     * @param transactions the initial collection of transactions
+     * @param view the view to use for data access
      * @return this builder for method chaining
      */
-    public StatsViewBuilder withInitialData(Collection<Transaction> transactions) {
-        this.initialData = transactions;
+    public StatsViewBuilder withView(View view) {
+        this.view = view;
         return self();
     }
 
+
     @Override
     public StatsViewComponent build() {
-        return new StatsViewComponent(initialData);
+        return new StatsViewComponent(view);
     }
 
     @Override
@@ -62,21 +61,39 @@ public class StatsViewBuilder implements ComponentBuilder<StatsViewBuilder.Stats
 
     @Getter
     public static class StatsViewComponent implements NodeBuilder {
-        private final VBox container;
+        private VBox container;
         private final EnumMap<ChartType, Chart> charts = new EnumMap<>(ChartType.class);
+        private View currentView;
 
-        public StatsViewComponent(Collection<Transaction> initialData) {
+        public StatsViewComponent(View view) {
+            this.currentView = view;
+            initCharts();
+            initContainer();
+            GridPane chartsGrid = buildChartsGrid();
+            container.getChildren().add(chartsGrid);
+            updateData();
+        }
+
+        private void initCharts() {
             charts.put(ChartType.PIE, new PieChart());
             charts.put(ChartType.BAR, new BarChart<>(new CategoryAxis(), new NumberAxis()));
 
+            if (charts.get(ChartType.PIE) instanceof PieChart pie) {
+                pie.setLabelsVisible(false);
+            }
+        }
+
+        private void initContainer() {
             container = new VBox(30);
             container.setAlignment(Pos.TOP_CENTER);
             container.setPadding(new Insets(20, 0, 0, 0));
+        }
 
-            GridPane chartsGrid = new GridPane();
-            chartsGrid.setHgap(30);
-            chartsGrid.setVgap(20);
-            chartsGrid.setAlignment(Pos.CENTER);
+        private GridPane buildChartsGrid() {
+            GridPane grid = new GridPane();
+            grid.setHgap(30);
+            grid.setVgap(20);
+            grid.setAlignment(Pos.CENTER);
 
             Arrays.stream(ChartType.values()).forEach(type -> {
                 Chart chart = charts.get(type);
@@ -87,95 +104,80 @@ public class StatsViewBuilder implements ComponentBuilder<StatsViewBuilder.Stats
                 VBox chartContainer = createStyledVBox(10, Pos.CENTER);
                 chartContainer.getChildren().addAll(label, chart);
 
-                chartsGrid.add(chartContainer, type.getColumnIndex(), 0);
+                grid.add(chartContainer, type.getColumnIndex(), 0);
             });
 
-            if (charts.get(ChartType.PIE) instanceof PieChart pie) {
-                pie.setLabelsVisible(false);
-            }
-
-            container.getChildren().add(chartsGrid);
-
-            // Load initial data
-            updateData(initialData != null ? initialData : Collections.emptyList());
+            return grid;
         }
 
         /**
-         * Updates the charts with a new collection of transactions.
-         *
-         * @param transactions the transactions to display
+         * Updates the charts using the current view and filters.
          */
-        public void updateData(Collection<Transaction> transactions) {
-            updatePieChart(transactions);
-            updateBarChart(transactions);
+        public void updateData() {
+            if (currentView != null) {
+                updatePieChart();
+                updateBarChart();
+            }
         }
 
-        private void updatePieChart(Collection<Transaction> transactions) {
-            Map<String, Double> expensesByTag = transactions.stream()
-                    .filter(t -> t.getDirection() == TransactionDirection.OUT)
-                    .collect(Collectors.groupingBy(
-                            t -> t.getAssociatedTags().findFirst()
-                                    .map(tag -> tag.getName())
-                                    .orElse("Altro"),
-                            Collectors.summingDouble(t -> t.getAmount().getValue())
-                    ));
+        /**
+         * Updates the view and filters, then refreshes the charts.
+         *
+         * @param view the new view to use
+         */
+        public void updateData(View view) {
+            this.currentView = view;
+            updateData();
+        }
 
-            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-            expensesByTag.forEach((category, amount) ->
-                    pieChartData.add(new PieChart.Data(category, amount)));
-
-            if (pieChartData.isEmpty()) {
-                pieChartData.add(new PieChart.Data("Nessun dato", 1));
+        private void updatePieChart() {
+            if (currentView == null) {
+                return;
             }
 
-            ((PieChart) charts.get(ChartType.PIE)).setData(pieChartData);
+            Map<NamedTag, Double> sums = Arrays.stream(NamedTag.values())
+                    .map(tag -> Map.entry(tag, currentView.total(tag, TransactionDirection.OUT)))
+                    .filter(entry -> entry.getValue() != 0d)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            updatePieChart(sums);
         }
 
-        private void updateBarChart(Collection<Transaction> transactions) {
-            Map<String, Double> incomeByMonth = transactions.stream()
-                    .filter(t -> t.getDirection() == TransactionDirection.IN)
-                    .collect(Collectors.groupingBy(
-                            this::getMonthYear,
-                            Collectors.summingDouble(t -> t.getAmount().getValue())
-                    ));
+        private void updatePieChart(Map<NamedTag, Double> sums) {
+            List<PieChart.Data> data = Optional.of(
+                            sums.entrySet().stream()
+                                    .map(e -> new PieChart.Data(e.getKey().name(), e.getValue()))
+                                    .toList()
+                    )
+                    .filter(list -> !list.isEmpty())
+                    .orElse(List.of(new PieChart.Data("Nessun dato", 1)));
 
-            Map<String, Double> expensesByMonth = transactions.stream()
-                    .filter(t -> t.getDirection() == TransactionDirection.OUT)
-                    .collect(Collectors.groupingBy(
-                            this::getMonthYear,
-                            Collectors.summingDouble(t -> t.getAmount().getValue())
-                    ));
+            if (charts.get(ChartType.PIE) instanceof PieChart pieChart) {
+                pieChart.setData(FXCollections.observableArrayList(data));
+            }
+        }
 
+        private void updateBarChart() {
+            if (currentView == null) {
+                return;
+            }
+
+            double totalIn = currentView.total(TransactionDirection.IN);
+            double totalOut = currentView.total(TransactionDirection.OUT);
+            updateBarChartWithData(totalIn, totalOut);
+        }
+
+        private void updateBarChartWithData(double totalIncome, double totalExpenses) {
             XYChart.Series<String, Number> incomeSeries = new XYChart.Series<>();
             incomeSeries.setName("Entrate");
+            incomeSeries.getData().add(new XYChart.Data<>("Totale", totalIncome));
 
             XYChart.Series<String, Number> expensesSeries = new XYChart.Series<>();
             expensesSeries.setName("Uscite");
-
-            incomeByMonth.forEach((month, amount) ->
-                    incomeSeries.getData().add(new XYChart.Data<>(month, amount)));
-
-            expensesByMonth.forEach((month, amount) ->
-                    expensesSeries.getData().add(new XYChart.Data<>(month, amount)));
-
-            if (incomeSeries.getData().isEmpty()) {
-                incomeSeries.getData().add(new XYChart.Data<>("Nessun dato", 0));
-            }
-
-            if (expensesSeries.getData().isEmpty()) {
-                expensesSeries.getData().add(new XYChart.Data<>("Nessun dato", 0));
-            }
+            expensesSeries.getData().add(new XYChart.Data<>("Totale", totalExpenses));
 
             BarChart<String, Number> barChart = (BarChart<String, Number>) charts.get(ChartType.BAR);
             barChart.getData().clear();
             barChart.getData().addAll(incomeSeries, expensesSeries);
-        }
-
-        private String getMonthYear(Transaction transaction) {
-            LocalDate date = transaction.getDate().toInstant()
-                    .atZone(java.time.ZoneId.systemDefault())
-                    .toLocalDate();
-            return date.format(DateTimeFormatter.ofPattern("MM/yyyy"));
         }
 
         @Override

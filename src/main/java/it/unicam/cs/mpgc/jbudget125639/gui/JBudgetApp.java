@@ -4,13 +4,13 @@ import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
 import it.unicam.cs.mpgc.jbudget125639.gui.builders.BalanceBoxBuilder;
+import it.unicam.cs.mpgc.jbudget125639.gui.builders.ComponentBuilderFactory;
 import it.unicam.cs.mpgc.jbudget125639.gui.builders.HeaderBarBuilder;
 import it.unicam.cs.mpgc.jbudget125639.gui.builders.NavigationBarBuilder;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.HomeScreen;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.ScreenManager;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.StatsScreen;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.ServiceFactory;
-import it.unicam.cs.mpgc.jbudget125639.modules.ComponentBuilderModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import it.unicam.cs.mpgc.jbudget125639.money.Currency;
@@ -32,6 +32,7 @@ import lombok.Setter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static it.unicam.cs.mpgc.jbudget125639.gui.builders.HeaderBarBuilder.HeaderBarComponent.ADD_USER_LABEL;
@@ -44,12 +45,12 @@ public class JBudgetApp extends Application {
     private StackPane mainContentStack;
     private ScreenManager screenManager;
     private ServiceFactory.ServiceBundle services;
-    private ComponentBuilderModule componentBuilder;
 
     private View currentView;
     
     private HeaderBarBuilder.HeaderBarComponent headerBar;
     private BalanceBoxBuilder.BalanceBoxComponent balanceBox;
+    private NavigationBarBuilder.NavigationBarComponent navigationBar;
     private HomeScreen homeScreen;
     private StatsScreen statsScreen;
 
@@ -61,14 +62,13 @@ public class JBudgetApp extends Application {
         setupUI(primaryStage);
         initializeScreens();
 
-        screenManager.switchToScreen(HomeScreen.SCREEN_ID);
         updateData();
     }
 
     private void setupUI(@NonNull Stage primaryStage) {
         BorderPane root = createRootLayout();
         Scene scene = new Scene(root, 1100, 850);
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -78,7 +78,11 @@ public class JBudgetApp extends Application {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("root");
 
-        headerBar = componentBuilder.createHeaderBar(this::onUserChanged, this::onFiltersChanged);
+        headerBar = ComponentBuilderFactory.headerBar()
+                .withUserChangeHandler(this::onUserChanged)
+                .withFiltersChangeHandler(this::onFiltersChanged)
+                .withModulesManager(modulesManager)
+                .build();
         root.setTop(headerBar.getNode());
 
         ScrollPane scrollPane = new ScrollPane(createMainContent());
@@ -95,11 +99,13 @@ public class JBudgetApp extends Application {
         centerLayout.setPadding(new Insets(20, 40, 40, 40));
         centerLayout.setAlignment(Pos.TOP_CENTER);
 
-        balanceBox = componentBuilder.createBalanceBox();
+        balanceBox = ComponentBuilderFactory.balanceBox().build();
 
         StackPane screensContainer = new StackPane();
         screenManager = new ScreenManager(screensContainer);
-        NavigationBarBuilder.NavigationBarComponent navigationBar = componentBuilder.createNavigationBar(screenManager);
+        navigationBar = ComponentBuilderFactory.navigationBar()
+                .withScreenManager(screenManager)
+                .build();
 
         VBox.setVgrow(screensContainer, Priority.ALWAYS);
         centerLayout.getChildren().addAll(
@@ -122,21 +128,16 @@ public class JBudgetApp extends Application {
         currentView = modulesManager.getModule(GlobalModule.class).getGlobal();
         screenManager.setViewer(currentView);
 
+        // Now that screens are registered, activate the first screen
+        navigationBar.activateFirstScreen();
+
         refreshHeaderUsers();
     }
 
     private void initializeServices() {
         ServiceFactory serviceFactory = new ServiceFactory(modulesManager);
         this.services = serviceFactory.createServiceBundle();
-        
-        // Initialize component builder module
-        this.componentBuilder = new ComponentBuilderModule(modulesManager);
-        try {
-            componentBuilder.load();
-            componentBuilder.setServices(services);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize ComponentBuilderModule", e);
-        }
+
     }
 
 
@@ -170,7 +171,7 @@ public class JBudgetApp extends Application {
 
             balanceBox.updateBalance(new MoneyAmount(balance, Currency.EUR));
             homeScreen.updateTransactions(filteredTransactions);
-            statsScreen.updateStats(filteredTransactions);
+            statsScreen.updateStats(currentView);
             headerBar.setCurrentUser(currentView.getName());
         }
     }

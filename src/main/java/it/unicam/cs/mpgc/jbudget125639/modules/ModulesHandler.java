@@ -20,7 +20,7 @@ public class ModulesHandler implements ModulesManager {
 
     @Override
     public void add(@NonNull Module... modules) {
-        Stream.of(modules).forEach(this.modules::add);
+        this.modules.addAll(Arrays.asList(modules));
     }
 
     @Override

@@ -24,7 +24,11 @@ public class JavaFXModule extends RequiresModulesManagerModule {
     @Override
     protected void internalLoad() {
         JBudgetApp.setModulesManager(modulesManager);
-        Application.launch(JBudgetApp.class);
+        try {
+            Application.launch(JBudgetApp.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

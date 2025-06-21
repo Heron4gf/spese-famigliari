@@ -10,6 +10,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import static it.unicam.cs.mpgc.jbudget125639.gui.builders.BuilderUtils.requireNonNull;
 
 /**
@@ -44,8 +47,8 @@ public class NavigationBarBuilder implements ComponentBuilder<NavigationBarBuild
     public static class NavigationBarComponent implements NodeBuilder {
         private final HBox container;
         private final ScreenManager screenManager;
-        private final ToggleButton homeButton;
-        private final ToggleButton statsButton;
+        private final ToggleGroup toggleGroup = new ToggleGroup();
+        private final LinkedHashMap<String, String> screenMap = new LinkedHashMap<>();
 
         /**
          * Costruttore della barra di navigazione.
@@ -54,44 +57,60 @@ public class NavigationBarBuilder implements ComponentBuilder<NavigationBarBuild
          */
         public NavigationBarComponent(ScreenManager screenManager) {
             this.screenManager = screenManager;
-
-            container = new HBox();
+            this.container = new HBox();
             container.setAlignment(Pos.CENTER);
             container.setSpacing(0);
             container.getStyleClass().add("nav-box");
 
-            ToggleGroup toggleGroup = new ToggleGroup();
+            screenMap.put("Home", HomeScreen.SCREEN_ID);
+            screenMap.put("Statistiche", StatsScreen.SCREEN_ID);
 
-            homeButton = new ToggleButton("Home");
-            homeButton.setToggleGroup(toggleGroup);
-            homeButton.setSelected(true);
-            homeButton.getStyleClass().add("nav-button");
+            initializeButtons();
+        }
 
-            statsButton = new ToggleButton("Statistiche");
-            statsButton.setToggleGroup(toggleGroup);
-            statsButton.getStyleClass().add("nav-button");
+        private void initializeButtons() {
+            List<ToggleButton> buttons = screenMap.entrySet().stream()
+                    .map(entry -> createNavButton(entry.getKey(), entry.getValue()))
+                    .toList(); // oppure collect(Collectors.toList()) se usi Java < 16
 
-            setupEventHandlers();
-            container.getChildren().addAll(homeButton, statsButton);
+            buttons.forEach(container.getChildren()::add);
+
+            if (!buttons.isEmpty()) {
+                ToggleButton firstButton = buttons.getFirst();
+                firstButton.setSelected(true);
+                // Don't switch to screen immediately - let the application handle this after screens are registered
+            }
+        }
+        /**
+         * Selects the first button and switches to its corresponding screen.
+         * This should be called after all screens have been registered.
+         */
+        public void activateFirstScreen() {
+            if (!screenMap.isEmpty()) {
+                String firstScreenId = screenMap.values().iterator().next();
+                if (screenManager.isScreenRegistered(firstScreenId)) {
+                    screenManager.switchToScreen(firstScreenId);
+                }
+            }
+        }
+
+        private ToggleButton createNavButton(String label, String screenId) {
+            ToggleButton button = new ToggleButton(label);
+            button.setToggleGroup(toggleGroup);
+            button.getStyleClass().add("nav-button");
+
+            button.setOnAction(e -> {
+                if (button.isSelected()) {
+                    screenManager.switchToScreen(screenId);
+                }
+            });
+
+            return button;
         }
 
         @Override
         public Node getNode() {
             return container;
-        }
-
-        private void setupEventHandlers() {
-            homeButton.setOnAction(e -> {
-                if (homeButton.isSelected()) {
-                    screenManager.switchToScreen(HomeScreen.SCREEN_ID);
-                }
-            });
-
-            statsButton.setOnAction(e -> {
-                if (statsButton.isSelected()) {
-                    screenManager.switchToScreen(StatsScreen.SCREEN_ID);
-                }
-            });
         }
     }
 }

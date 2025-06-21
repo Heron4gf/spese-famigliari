@@ -53,7 +53,11 @@ public class ScreenManager {
      * @throws IllegalArgumentException se la schermata non è registrata
      */
     public void switchToScreen(@NonNull String screenId) {
-        @NonNull Screen targetScreen = screens.get(screenId);
+        Screen targetScreen = screens.get(screenId);
+        
+        if (targetScreen == null) {
+            throw new IllegalArgumentException("Screen with ID '" + screenId + "' is not registered");
+        }
 
         if (currentScreen != null) {
             currentScreen.onDeactivate();

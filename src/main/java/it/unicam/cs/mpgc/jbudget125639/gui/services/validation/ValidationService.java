@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.jbudget125639.gui.services.validation;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import lombok.NonNull;
 
 import java.util.Set;
@@ -18,7 +19,9 @@ public class ValidationService {
     private final Validator validator;
     
     public ValidationService() {
-        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            this.validator = factory.getValidator();
+        }
     }
     
     /**

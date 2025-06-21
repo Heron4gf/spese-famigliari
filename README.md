@@ -1,9 +1,5 @@
 # JBudget - Sistema di Gestione Budget Familiare
 
-**Progetto per:** Metodologie di Programmazione, Modellazione e Gestione della Conoscenza, Programmazione Avanzata  
-**Consegna:** Giugno/Luglio/Settembre 2025  
-**Package:** `it.unicam.cs.mpgc.jbudget125639`
-
 ## Descrizione del Progetto
 
 JBudget è un'applicazione Java con interfaccia grafica JavaFX progettata per la gestione del budget familiare. Il sistema consente di tracciare movimenti finanziari, categorizzarli tramite tag, pianificare budget e visualizzare statistiche dettagliate. L'architettura modulare garantisce estendibilità e facilita l'integrazione di nuove funzionalità.
@@ -98,6 +94,3 @@ L'interfaccia grafica utilizza componenti modulari che possono essere estesi o s
 
 ## Estensione Entità e Persistenza
 Nuove entità possono essere aggiunte annotandole con ORMLite e registrandole nel `DatabaseModule`. Il sistema supporta migrazioni automatiche dello schema e mantiene la compatibilità con versioni precedenti del database.
-
-## Supporto Multi-Piattaforma
-L'architettura è progettata per supportare future estensioni su diverse piattaforme (web, mobile) attraverso la separazione tra logica di business e presentazione. I servizi possono essere esposti tramite API REST per integrazione con client esterni.

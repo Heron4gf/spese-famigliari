@@ -9,6 +9,10 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Enum che rappresenta diversi intervalli temporali predefiniti.
+ * Implementa il filtro {@link IFilter} per filtrare transazioni in base alla data.
+ */
 @AllArgsConstructor
 public enum TimeSpan implements IFilter {
     ONE_DAY(new DefinedTimeSpan(1, TimeUnit.DAYS)),
@@ -19,6 +23,12 @@ public enum TimeSpan implements IFilter {
 
     private DateFilter dateFilter;
 
+    /**
+     * Verifica se la transazione specificata rientra nell'intervallo temporale di questo filtro.
+     *
+     * @param transaction la transazione da valutare
+     * @return {@code true} se la transazione soddisfa il filtro, altrimenti {@code false}
+     */
     @Override
     public boolean pass(Transaction transaction) {
         return dateFilter.pass(transaction);

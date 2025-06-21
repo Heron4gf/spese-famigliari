@@ -12,9 +12,12 @@ public class JBudgetLauncher {
     @SneakyThrows // Usato perché @Cleanup richiede gestione eccezioni, anche se il costruttore non le lancia
     public static void main(String[] args) {
         @Cleanup("unload") ModulesManager modulesManager = new ModulesHandler();
-        modulesManager.addAndLoad(new DatabaseModule());
-        modulesManager.addAndLoad(new GlobalModule(modulesManager));
-        modulesManager.addAndLoad(new JavaFXModule(modulesManager));
+
+        modulesManager.addAndLoad(
+                new DatabaseModule(),
+                new GlobalModule(modulesManager),
+                new JavaFXModule(modulesManager)
+        );
     }
 
 }

@@ -8,6 +8,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,14 +19,14 @@ public class ModulesHandler implements ModulesManager {
     private Collection<Module> modules = new LinkedList<>();
 
     @Override
-    public void add(@NonNull Module module) {
-        this.modules.add(module);
+    public void add(@NonNull Module... modules) {
+        Stream.of(modules).forEach(this.modules::add);
     }
 
     @Override
-    public void addAndLoad(@NonNull Module module) {
-        add(module);
-        loadModule(module);
+    public void addAndLoad(@NonNull Module... modules) {
+        add(modules);
+        Stream.of(modules).forEach(this::loadModule);
     }
 
     @Override

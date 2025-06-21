@@ -6,13 +6,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-import java.text.DecimalFormat;
-
 public class BalanceBox {
     
     private final VBox container;
     private final Label amountLabel;
-    private final DecimalFormat formatter = new DecimalFormat("#,##0.00");
 
     public BalanceBox() {
         container = new VBox(5);

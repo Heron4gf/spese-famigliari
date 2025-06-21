@@ -5,164 +5,135 @@ import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
 import it.unicam.cs.mpgc.jbudget125639.filters.TransactionDirection;
 import it.unicam.cs.mpgc.jbudget125639.filters.dates.TimeSpan;
 import it.unicam.cs.mpgc.jbudget125639.filters.tags.NamedTag;
-import it.unicam.cs.mpgc.jbudget125639.gui.services.ServiceFactory;
-import javafx.geometry.Insets;
+import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
+import it.unicam.cs.mpgc.jbudget125639.modules.headerbarinit.FiltersComboBoxInitModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.headerbarinit.InitContainerModule;
+import it.unicam.cs.mpgc.jbudget125639.modules.headerbarinit.UserChangedConsumerModule;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import org.controlsfx.control.CheckComboBox;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HeaderBar {
 
-    public static final String ADD_USER_LABEL = "Aggiungi Utente...";
-    private static final String ALL_DIRECTIONS_LABEL = "Tutte";
-    private static final String ALL_TIMESPAN_LABEL = "Tutto il tempo";
-    private static final String ALL_TAGS_LABEL = "Tutti i tag";
+    @Getter
+    private final HBox container = new HBox(20);
+    private final EnumMap<ComboKey, ComboBox<String>> comboBoxes = new EnumMap<>(ComboKey.class);
+    {
+        comboBoxes.put(ComboKey.TIMESPAN, new ComboBox<>());
+        comboBoxes.put(ComboKey.DIRECTION, new ComboBox<>());
+        comboBoxes.put(ComboKey.TAGS, new ComboBox<>());
+        comboBoxes.put(ComboKey.USER, new ComboBox<>());
+    }
 
-    private final HBox container;
-    private final ComboBox<String> timeSpanComboBox;
-    private final ComboBox<String> directionComboBox;
-    private final ComboBox<String> tagsComboBox;
-    private final ComboBox<String> userComboBox;
-    private final ServiceFactory.ServiceBundle services;
+    private ComboBox<String> combo(ComboKey key) {
+        return comboBoxes.get(key);
+    }
 
-    private final Consumer<String> onUserChanged;
-    private final Runnable onFiltersChanged;
-
-    public HeaderBar(ServiceFactory.ServiceBundle services, Consumer<String> onUserChanged, Runnable onFiltersChanged) {
-        this.services = services;
-        this.onUserChanged = onUserChanged;
-        this.onFiltersChanged = onFiltersChanged;
-        
-        container = new HBox(20);
-        container.setAlignment(Pos.CENTER_LEFT);
-        container.setPadding(new Insets(10, 20, 10, 20));
-        container.getStyleClass().add("header");
-
-        // TimeSpan dropdown for date filtering
-        timeSpanComboBox = new ComboBox<>();
-        timeSpanComboBox.setPromptText("Filtra per periodo");
-        timeSpanComboBox.getItems().add(ALL_TIMESPAN_LABEL);
-        Arrays.stream(TimeSpan.values()).forEach(timeSpan -> 
-            timeSpanComboBox.getItems().add(timeSpan.name())
+    public HeaderBar(Consumer<String> onUserChanged, Runnable onFiltersChanged, ModulesManager modulesManager) {
+        modulesManager.addAndLoad(
+                new InitContainerModule(container),
+                new FiltersComboBoxInitModule(
+                        combo(ComboKey.TIMESPAN),
+                        combo(ComboKey.DIRECTION),
+                        combo(ComboKey.TAGS),
+                        onFiltersChanged
+                ),
+                new UserChangedConsumerModule(
+                        onUserChanged,
+                        combo(ComboKey.USER)
+                )
         );
-        timeSpanComboBox.setValue(ALL_TIMESPAN_LABEL);
-        timeSpanComboBox.setOnAction(e -> onFiltersChanged.run());
 
-        // TransactionDirection dropdown using enum names
-        directionComboBox = new ComboBox<>();
-        directionComboBox.getItems().add(ALL_DIRECTIONS_LABEL);
-        Arrays.stream(TransactionDirection.values()).forEach(direction -> 
-            directionComboBox.getItems().add(direction.name())
+        assembleComponents();
+    }
+
+    private void assembleComponents() {
+        HBox filtersBox = new HBox(
+                10,
+                combo(ComboKey.TIMESPAN),
+                combo(ComboKey.DIRECTION),
+                combo(ComboKey.TAGS)
         );
-        directionComboBox.setValue(ALL_DIRECTIONS_LABEL);
-        directionComboBox.setOnAction(e -> onFiltersChanged.run());
-
-        // NamedTag dropdown using getName()
-        tagsComboBox = new ComboBox<>();
-        tagsComboBox.setPromptText("Filtra per tag");
-        tagsComboBox.getItems().add(ALL_TAGS_LABEL);
-        Arrays.stream(NamedTag.values()).forEach(namedTag -> 
-            tagsComboBox.getItems().add(namedTag.getName())
-        );
-        tagsComboBox.setValue(ALL_TAGS_LABEL);
-        tagsComboBox.setOnAction(e -> onFiltersChanged.run());
-
-        HBox filtersBox = new HBox(10, timeSpanComboBox, directionComboBox, tagsComboBox);
         filtersBox.setAlignment(Pos.CENTER_LEFT);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        userComboBox = new ComboBox<>();
-        userComboBox.getStyleClass().add("user-combo-box");
-        userComboBox.setOnAction(e -> {
-            String selected = userComboBox.getValue();
-            if (selected != null) {
-                onUserChanged.accept(selected);
-            }
-        });
-
-        refreshUsers();
-
-        container.getChildren().addAll(filtersBox, spacer, userComboBox);
+        container.getChildren().addAll(filtersBox, spacer, combo(ComboKey.USER));
     }
 
-
-    public void refreshUsers() {
-        // This method is kept for backward compatibility but now uses updateUserList
-        updateUserList(List.of());
-    }
-    
     /**
-     * Updates the user list in the combo box with the provided view names.
-     * This method is called by JBudgetApp to centralize view management.
-     * 
-     * @param viewNames the list of view names to display
+     * Aggiorna la lista degli utenti nel combo box, aggiungendo i nomi forniti,
+     * un'opzione vuota e una voce per aggiungere un nuovo utente.
+     *
+     * @param viewNames elenco dei nomi utente da visualizzare
      */
     public void updateUserList(List<String> viewNames) {
-        userComboBox.getItems().clear();
-        userComboBox.getItems().addAll(viewNames);
-        userComboBox.getItems().add("");
-        userComboBox.getItems().add(ADD_USER_LABEL);
-        
-        if (!viewNames.isEmpty()) {
-            userComboBox.setValue(viewNames.get(0));
+        ComboBox<String> userBox = combo(ComboKey.USER);
+        ObservableList<String> items = FXCollections.observableArrayList();
+
+        if (viewNames != null && !viewNames.isEmpty()) {
+            items.addAll(viewNames);
+            userBox.setValue(viewNames.getFirst());
         }
+
+        items.add(""); // Separatore
+        items.add(LabelKey.ADD_USER.label());
+
+        userBox.setItems(items);
     }
 
     public void setCurrentUser(String userName) {
-        userComboBox.setValue(userName);
+        combo(ComboKey.USER).setValue(userName);
     }
 
     public List<IFilter> getCurrentFilters() {
-        List<IFilter> filters = new ArrayList<>();
-        
-        // TimeSpan filter
-        String selectedTimeSpan = timeSpanComboBox.getValue();
-        if (selectedTimeSpan != null && !ALL_TIMESPAN_LABEL.equals(selectedTimeSpan)) {
-            try {
-                TimeSpan timeSpan = TimeSpan.valueOf(selectedTimeSpan);
-                filters.add(timeSpan);
-            } catch (IllegalArgumentException e) {
-                // Invalid timespan, ignore
-            }
-        }
-        
-        // TransactionDirection filter using enum
-        String direction = directionComboBox.getValue();
-        if (direction != null && !ALL_DIRECTIONS_LABEL.equals(direction)) {
-            try {
-                TransactionDirection dir = TransactionDirection.valueOf(direction);
-                filters.add(dir);
-            } catch (IllegalArgumentException e) {
-                // Invalid direction, ignore
-            }
-        }
-        
-        // NamedTag filter using getName()
-        String selectedTagName = tagsComboBox.getValue();
-        if (selectedTagName != null && !ALL_TAGS_LABEL.equals(selectedTagName)) {
-            NamedTag namedTag = getNamedTagByName(selectedTagName);
-            if (namedTag != null) {
-                filters.add(namedTag);
-            }
-        }
-        
-        // Use EmptyFilter as default if no filters are applied
+        List<IFilter> filters = Stream.of(
+                        extractEnumFilter(combo(ComboKey.TIMESPAN), LabelKey.ALL_TIMESPAN.label(), TimeSpan::valueOf),
+                        extractEnumFilter(combo(ComboKey.DIRECTION), LabelKey.ALL_DIRECTIONS.label(), TransactionDirection::valueOf),
+                        extractNamedTagFilter(combo(ComboKey.TAGS), LabelKey.ALL_TAGS.label())
+                )
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
         if (filters.isEmpty()) {
             filters.add(new EmptyFilter("No filters applied"));
         }
-        
+
         return filters;
+    }
+
+    private <E extends IFilter> E extractEnumFilter(ComboBox<String> comboBox, String allLabel, Function<String, E> parser) {
+        String value = comboBox.getValue();
+        if (value != null && !value.equals(allLabel)) {
+            try {
+                return parser.apply(value);
+            } catch (IllegalArgumentException ignored) {
+                // valore non valido, restituisce null
+            }
+        }
+        return null;
+    }
+
+    private NamedTag extractNamedTagFilter(ComboBox<String> comboBox, String allLabel) {
+        String value = comboBox.getValue();
+        if (value != null && !value.equals(allLabel)) {
+            return getNamedTagByName(value);
+        }
+        return null;
     }
 
 
@@ -173,7 +144,16 @@ public class HeaderBar {
                 .orElse(null);
     }
 
-    public Node getNode() {
-        return container;
+    @Accessors(fluent = true)
+    @RequiredArgsConstructor
+    @Getter
+    public enum LabelKey {
+        ADD_USER("Aggiungi Utente..."),
+        ALL_DIRECTIONS("Tutte"),
+        ALL_TIMESPAN("Tutto il tempo"),
+        ALL_TAGS("Tutti i tag");
+
+        private final String label;
     }
+
 }

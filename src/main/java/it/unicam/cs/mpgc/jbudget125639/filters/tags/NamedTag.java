@@ -3,6 +3,11 @@ package it.unicam.cs.mpgc.jbudget125639.filters.tags;
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import lombok.AllArgsConstructor;
 
+/**
+ * Enum che rappresenta un insieme di tag predefiniti con priorità associate.
+ * Ogni tag è delegato a un oggetto {@link Tag} specifico, implementando comportamenti
+ * come la verifica della corrispondenza con una transazione e il confronto di priorità.
+ */
 @AllArgsConstructor
 public enum NamedTag implements Tag {
     UTENZE(new PriorityTag("Utenze", 11)),
@@ -17,6 +22,12 @@ public enum NamedTag implements Tag {
 
     private final Tag associatedTag;
 
+    /**
+     * Verifica se la transazione soddisfa il criterio del tag associato.
+     *
+     * @param transaction la transazione da valutare
+     * @return {@code true} se la transazione ha il tag, altrimenti {@code false}
+     */
     @Override
     public boolean pass(Transaction transaction) {
         return this.associatedTag.pass(transaction);

@@ -15,7 +15,6 @@ public interface Tag extends IFilter {
     Integer getPriority();
 
     /**
-     * Restituisce il nome del tag.
      * @return il nome del tag.
      */
     String getName();

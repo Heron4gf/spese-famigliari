@@ -16,20 +16,20 @@ public interface ModulesManager extends it.unicam.cs.mpgc.jbudget125639.modules.
     <T extends Module> T getModule(Class<T> moduleClass);
 
     /**
-     * Aggiunge un nuovo modulo al gestore senza caricarlo.
+     * Aggiunge uno o più nuovi moduli al gestore senza caricarli.
      *
-     * @param module il modulo da aggiungere.
+     * @param modules i moduli da aggiungere
      * @throws NullPointerException se il modulo fornito è nullo.
      */
-    void add(@NonNull Module module);
+    void add(@NonNull Module... modules);
 
     /**
-     * Aggiunge un nuovo modulo al gestore e lo carica immediatamente.
+     * Aggiunge uno o più nuovi moduli al gestore e li carica immediatamente.
      *
-     * @param module il modulo da aggiungere e caricare.
+     * @param modules i moduli da aggiungere e caricare.
      * @throws NullPointerException se il modulo fornito è nullo.
      * @throws Exception se si verifica un errore durante il caricamento del modulo.
      */
-    void addAndLoad(@NonNull Module module);
+    void addAndLoad(@NonNull Module... modules);
 
 }

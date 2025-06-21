@@ -23,10 +23,22 @@ public class DateCalculator {
         return timeUnit.toMillis(amount);
     }
 
+    /**
+     * Restituisce una data futura ottenuta aggiungendo l'intervallo specificato
+     * (espresso tramite {@code amount} e {@code timeUnit}) alla data attuale.
+     *
+     * @return una {@link Date} nel futuro rispetto alla data di riferimento
+     */
     public Date inFuture() {
         return Date.from(instant().plusMillis(millis()));
     }
 
+    /**
+     * Restituisce una data passata ottenuta sottraendo l'intervallo specificato
+     * (espresso tramite {@code amount} e {@code timeUnit}) alla data attuale.
+     *
+     * @return una {@link Date} nel passato rispetto alla data di riferimento
+     */
     public Date inPast() {
         return Date.from(instant().minusMillis(millis()));
     }

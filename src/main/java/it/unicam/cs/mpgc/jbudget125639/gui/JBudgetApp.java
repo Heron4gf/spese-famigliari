@@ -25,13 +25,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
-import static it.unicam.cs.mpgc.jbudget125639.gui.components.HeaderBar.ADD_USER_LABEL;
 
 public class JBudgetApp extends Application {
 
@@ -46,12 +45,11 @@ public class JBudgetApp extends Application {
     
     private HeaderBar headerBar;
     private BalanceBox balanceBox;
-    private NavigationBar navigationBar;
     private HomeScreen homeScreen;
     private StatsScreen statsScreen;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(@NonNull Stage primaryStage) {
         primaryStage.setTitle("Applicazione JBudget");
 
         initializeServices();
@@ -62,7 +60,7 @@ public class JBudgetApp extends Application {
         updateData();
     }
 
-    private void setupUI(Stage primaryStage) {
+    private void setupUI(@NonNull Stage primaryStage) {
         BorderPane root = createRootLayout();
         Scene scene = new Scene(root, 1100, 850);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
@@ -75,8 +73,8 @@ public class JBudgetApp extends Application {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("root");
 
-        headerBar = new HeaderBar(services, this::onUserChanged, this::onFiltersChanged);
-        root.setTop(headerBar.getNode());
+        headerBar = new HeaderBar(this::onUserChanged, this::onFiltersChanged, modulesManager);
+        root.setTop(headerBar.getContainer());
 
         ScrollPane scrollPane = new ScrollPane(createMainContent());
         scrollPane.setFitToWidth(true);
@@ -96,7 +94,7 @@ public class JBudgetApp extends Application {
 
         StackPane screensContainer = new StackPane();
         screenManager = new ScreenManager(screensContainer);
-        navigationBar = new NavigationBar(screenManager);
+        NavigationBar navigationBar = new NavigationBar(screenManager);
 
         VBox.setVgrow(screensContainer, Priority.ALWAYS);
         centerLayout.getChildren().addAll(
@@ -130,16 +128,17 @@ public class JBudgetApp extends Application {
 
 
     private void onUserChanged(String userName) {
-        if (userName == null || userName.equals(ADD_USER_LABEL)) {
-            if (ADD_USER_LABEL.equals(userName)) {
-                showAddUserDialog();
-            }
+        if (userName == null) {
+            return;
+        }
+
+        if (HeaderBar.LabelKey.ADD_USER.label().equals(userName)) {
+            showAddUserDialog();
             return;
         }
 
         GlobalModule globalModule = modulesManager.getModule(GlobalModule.class);
-        View view = globalModule.getGlobal().getView(userName);
-        currentView = view;
+        currentView = globalModule.getGlobal().getView(userName);
         screenManager.setViewer(currentView);
         updateData();
     }

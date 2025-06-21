@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.jbudget125639.gui.screens;
 
-import it.unicam.cs.mpgc.jbudget125639.gui.components.StatsView;
+import it.unicam.cs.mpgc.jbudget125639.gui.builders.ComponentBuilderFactory;
+import it.unicam.cs.mpgc.jbudget125639.gui.builders.StatsViewBuilder;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.ServiceFactory;
 import javafx.scene.Node;
 
@@ -11,7 +12,7 @@ public class StatsScreen extends AbstractScreen {
     
     public static final String SCREEN_ID = "stats";
     
-    private StatsView statsView;
+    private StatsViewBuilder.StatsViewComponent statsView;
     
     /**
      * Costruttore della schermata Stats.
@@ -29,7 +30,7 @@ public class StatsScreen extends AbstractScreen {
     
     @Override
     protected void createContent() {
-        statsView = new StatsView();
+        statsView = ComponentBuilderFactory.statsView().build();
     }
     
     @Override

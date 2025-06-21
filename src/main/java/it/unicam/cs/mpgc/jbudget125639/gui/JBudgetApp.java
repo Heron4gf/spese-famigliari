@@ -3,17 +3,19 @@ package it.unicam.cs.mpgc.jbudget125639.gui;
 import it.unicam.cs.mpgc.jbudget125639.entities.Transaction;
 import it.unicam.cs.mpgc.jbudget125639.entities.User;
 import it.unicam.cs.mpgc.jbudget125639.filters.IFilter;
-import it.unicam.cs.mpgc.jbudget125639.gui.components.BalanceBox;
-import it.unicam.cs.mpgc.jbudget125639.gui.components.HeaderBar;
-import it.unicam.cs.mpgc.jbudget125639.gui.components.NavigationBar;
+import it.unicam.cs.mpgc.jbudget125639.gui.builders.BalanceBoxBuilder;
+import it.unicam.cs.mpgc.jbudget125639.gui.builders.HeaderBarBuilder;
+import it.unicam.cs.mpgc.jbudget125639.gui.builders.NavigationBarBuilder;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.HomeScreen;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.ScreenManager;
 import it.unicam.cs.mpgc.jbudget125639.gui.screens.StatsScreen;
 import it.unicam.cs.mpgc.jbudget125639.gui.services.ServiceFactory;
+import it.unicam.cs.mpgc.jbudget125639.modules.ComponentBuilderModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule;
 import it.unicam.cs.mpgc.jbudget125639.modules.abstracts.ModulesManager;
 import it.unicam.cs.mpgc.jbudget125639.money.Currency;
 import it.unicam.cs.mpgc.jbudget125639.money.MoneyAmount;
+import it.unicam.cs.mpgc.jbudget125639.views.Global;
 import it.unicam.cs.mpgc.jbudget125639.views.View;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -32,7 +34,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static it.unicam.cs.mpgc.jbudget125639.gui.components.HeaderBar.ADD_USER_LABEL;
+import static it.unicam.cs.mpgc.jbudget125639.gui.builders.HeaderBarBuilder.HeaderBarComponent.ADD_USER_LABEL;
 
 public class JBudgetApp extends Application {
 
@@ -42,11 +44,12 @@ public class JBudgetApp extends Application {
     private StackPane mainContentStack;
     private ScreenManager screenManager;
     private ServiceFactory.ServiceBundle services;
+    private ComponentBuilderModule componentBuilder;
 
     private View currentView;
     
-    private HeaderBar headerBar;
-    private BalanceBox balanceBox;
+    private HeaderBarBuilder.HeaderBarComponent headerBar;
+    private BalanceBoxBuilder.BalanceBoxComponent balanceBox;
     private HomeScreen homeScreen;
     private StatsScreen statsScreen;
 
@@ -75,8 +78,8 @@ public class JBudgetApp extends Application {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("root");
 
-        headerBar = new HeaderBar(this::onUserChanged, this::onFiltersChanged, modulesManager);
-        root.setTop(headerBar.getContainer());
+        headerBar = componentBuilder.createHeaderBar(this::onUserChanged, this::onFiltersChanged);
+        root.setTop(headerBar.getNode());
 
         ScrollPane scrollPane = new ScrollPane(createMainContent());
         scrollPane.setFitToWidth(true);
@@ -92,11 +95,11 @@ public class JBudgetApp extends Application {
         centerLayout.setPadding(new Insets(20, 40, 40, 40));
         centerLayout.setAlignment(Pos.TOP_CENTER);
 
-        balanceBox = new BalanceBox();
+        balanceBox = componentBuilder.createBalanceBox();
 
         StackPane screensContainer = new StackPane();
         screenManager = new ScreenManager(screensContainer);
-        NavigationBar navigationBar = new NavigationBar(screenManager);
+        NavigationBarBuilder.NavigationBarComponent navigationBar = componentBuilder.createNavigationBar(screenManager);
 
         VBox.setVgrow(screensContainer, Priority.ALWAYS);
         centerLayout.getChildren().addAll(
@@ -118,14 +121,22 @@ public class JBudgetApp extends Application {
 
         currentView = modulesManager.getModule(GlobalModule.class).getGlobal();
         screenManager.setViewer(currentView);
-        
-        // Initialize the header with current users
+
         refreshHeaderUsers();
     }
 
     private void initializeServices() {
         ServiceFactory serviceFactory = new ServiceFactory(modulesManager);
         this.services = serviceFactory.createServiceBundle();
+        
+        // Initialize component builder module
+        this.componentBuilder = new ComponentBuilderModule(modulesManager);
+        try {
+            componentBuilder.load();
+            componentBuilder.setServices(services);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize ComponentBuilderModule", e);
+        }
     }
 
 
@@ -189,11 +200,11 @@ public class JBudgetApp extends Application {
      * Aggiorna la lista degli utenti nella HeaderBar.
      */
     private void refreshHeaderUsers() {
-        var global = modulesManager.getModule(GlobalModule.class).getGlobal();
-        var viewNames = global.getViews().stream()
+        Global global = modulesManager.getModule(GlobalModule.class).getGlobal();
+        List<String> viewNames = global.getViews().stream()
                 .map(View::getName)
-                .filter(name -> !name.equals("global")) // Exclude the global view itself
                 .toList();
+
         headerBar.updateUserList(viewNames);
     }
     

@@ -55,7 +55,7 @@ public class NavigationBarComponent implements NodeBuilder {
         container.getChildren().addAll(buttons);
 
         if (!buttons.isEmpty()) {
-            buttons.getFirst().setSelected(true);
+            buttons.get(0).setSelected(true);
         }
     }
 

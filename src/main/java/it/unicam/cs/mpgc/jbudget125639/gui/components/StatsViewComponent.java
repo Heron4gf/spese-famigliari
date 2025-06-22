@@ -107,7 +107,7 @@ public class StatsViewComponent implements NodeBuilder {
         if (currentView == null) return;
 
         Map<NamedTag, Double> sums = Arrays.stream(NamedTag.values())
-                .map(tag -> Map.entry(tag, currentView.total(tag, TransactionDirection.OUT)))
+                .map(tag -> Map.entry(tag, currentView.total(tag.asPriorityTag(), TransactionDirection.OUT)))
                 .filter(entry -> entry.getValue() != 0d)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         updatePieChart(sums);

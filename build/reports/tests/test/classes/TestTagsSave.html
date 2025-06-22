@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.242s</div>
+<div class="counter">0.268s</div>
 <p>duration</p>
 </div>
 </td>
@@ -82,7 +82,7 @@
 </thead>
 <tr>
 <td class="success">saveTransactionWithTags()</td>
-<td class="success">0.242s</td>
+<td class="success">0.268s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -90,124 +90,133 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2025-06-21 20:25:42,568 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.Transaction with reflection
-2025-06-21 20:25:42,579 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag with reflection
-2025-06-21 20:25:42,582 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.filters.tags.PriorityTag with reflection
-2025-06-21 20:25:42,582 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.User with reflection
-2025-06-21 20:25:42,583 [INFO] TableUtils creating table 'Users'
-2025-06-21 20:25:43,073 [DEBUG] BaseJdbcConnectionSource opened connection to jdbc:sqlite:database.db got #616207929
-2025-06-21 20:25:43,120 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` VARCHAR NOT NULL ,  UNIQUE (`name`)) 
-2025-06-21 20:25:43,124 [INFO] TableUtils creating table 'Transactions'
-2025-06-21 20:25:43,126 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Transactions` (`user_id` INTEGER , `id` INTEGER PRIMARY KEY AUTOINCREMENT , `direction` VARCHAR NOT NULL , `amount` BLOB NOT NULL , `description` VARCHAR NOT NULL , `date` TIMESTAMP NOT NULL ) 
-2025-06-21 20:25:43,127 [INFO] TableUtils creating table 'tags'
-2025-06-21 20:25:43,129 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `tags` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` VARCHAR NOT NULL , `priority` INTEGER NOT NULL ,  UNIQUE (`name`)) 
-2025-06-21 20:25:43,129 [INFO] TableUtils creating table 'transaction_tags'
-2025-06-21 20:25:43,130 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `transaction_tags` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `transaction_id` INTEGER , `tag_id` INTEGER ) 
-2025-06-21 20:25:43,146 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Utenze'
-2025-06-21 20:25:43,151 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Utenze'' with 0 args
-2025-06-21 20:25:43,158 [DEBUG] SelectIterator starting iterator @1398241764 for 'SELECT * FROM `tags` WHERE `name` = 'Utenze''
-2025-06-21 20:25:43,180 [DEBUG] SelectIterator closed iterator @1398241764 after 1 rows
-2025-06-21 20:25:43,180 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Utenze'' with 0 args returned 1 results
-2025-06-21 20:25:43,181 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Sport'
-2025-06-21 20:25:43,181 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Sport'' with 0 args
-2025-06-21 20:25:43,181 [DEBUG] SelectIterator starting iterator @948250363 for 'SELECT * FROM `tags` WHERE `name` = 'Sport''
-2025-06-21 20:25:43,182 [DEBUG] SelectIterator closed iterator @948250363 after 1 rows
-2025-06-21 20:25:43,182 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Sport'' with 0 args returned 1 results
-2025-06-21 20:25:43,182 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'
-2025-06-21 20:25:43,182 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'' with 0 args
-2025-06-21 20:25:43,182 [DEBUG] SelectIterator starting iterator @564272228 for 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto''
-2025-06-21 20:25:43,183 [DEBUG] SelectIterator closed iterator @564272228 after 1 rows
-2025-06-21 20:25:43,183 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'' with 0 args returned 1 results
-2025-06-21 20:25:43,183 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Alimentari'
-2025-06-21 20:25:43,184 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Alimentari'' with 0 args
-2025-06-21 20:25:43,184 [DEBUG] SelectIterator starting iterator @125844477 for 'SELECT * FROM `tags` WHERE `name` = 'Alimentari''
-2025-06-21 20:25:43,184 [DEBUG] SelectIterator closed iterator @125844477 after 1 rows
-2025-06-21 20:25:43,185 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Alimentari'' with 0 args returned 1 results
-2025-06-21 20:25:43,185 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'
-2025-06-21 20:25:43,186 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args
-2025-06-21 20:25:43,186 [DEBUG] SelectIterator starting iterator @1119622337 for 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento''
-2025-06-21 20:25:43,186 [DEBUG] SelectIterator closed iterator @1119622337 after 1 rows
-2025-06-21 20:25:43,186 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args returned 1 results
-2025-06-21 20:25:43,187 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'
-2025-06-21 20:25:43,188 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'' with 0 args
-2025-06-21 20:25:43,188 [DEBUG] SelectIterator starting iterator @1394557075 for 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento''
-2025-06-21 20:25:43,189 [DEBUG] SelectIterator closed iterator @1394557075 after 1 rows
-2025-06-21 20:25:43,189 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'' with 0 args returned 1 results
-2025-06-21 20:25:43,189 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Salute'
-2025-06-21 20:25:43,189 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args
-2025-06-21 20:25:43,190 [DEBUG] SelectIterator starting iterator @1659840424 for 'SELECT * FROM `tags` WHERE `name` = 'Salute''
-2025-06-21 20:25:43,190 [DEBUG] SelectIterator closed iterator @1659840424 after 1 rows
-2025-06-21 20:25:43,190 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args returned 1 results
-2025-06-21 20:25:43,191 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Viaggi'
-2025-06-21 20:25:43,192 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Viaggi'' with 0 args
-2025-06-21 20:25:43,192 [DEBUG] SelectIterator starting iterator @1681303515 for 'SELECT * FROM `tags` WHERE `name` = 'Viaggi''
-2025-06-21 20:25:43,193 [DEBUG] SelectIterator closed iterator @1681303515 after 1 rows
-2025-06-21 20:25:43,193 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Viaggi'' with 0 args returned 1 results
-2025-06-21 20:25:43,193 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Educazione'
-2025-06-21 20:25:43,194 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Educazione'' with 0 args
-2025-06-21 20:25:43,195 [DEBUG] SelectIterator starting iterator @1175371136 for 'SELECT * FROM `tags` WHERE `name` = 'Educazione''
-2025-06-21 20:25:43,195 [DEBUG] SelectIterator closed iterator @1175371136 after 1 rows
-2025-06-21 20:25:43,196 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Educazione'' with 0 args returned 1 results
-2025-06-21 20:25:43,257 [DEBUG] StatementBuilder built statement SELECT * FROM `Users`
-2025-06-21 20:25:43,259 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Users`' with 0 args
-2025-06-21 20:25:43,260 [DEBUG] SelectIterator starting iterator @236567414 for 'SELECT * FROM `Users`'
-2025-06-21 20:25:43,264 [DEBUG] SelectIterator closed iterator @236567414 after 1 rows
-2025-06-21 20:25:43,265 [DEBUG] StatementExecutor query of 'SELECT * FROM `Users`' with 0 args returned 1 results
-2025-06-21 20:25:43,312 [DEBUG] StatementBuilder built statement SELECT COUNT(*) FROM `Users` WHERE `id` = ?
-2025-06-21 20:25:43,323 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `Users` WHERE `id` = ?' returned 1
-2025-06-21 20:25:43,351 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `Users` SET `name` = ? WHERE `id` = ?' and 2 args, changed 1 rows
-2025-06-21 20:25:43,354 [DEBUG] StatementBuilder built statement SELECT * FROM `Transactions` WHERE `user_id` = ?
-2025-06-21 20:25:43,357 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Transactions` WHERE `user_id` = ?' with 1 args
-2025-06-21 20:25:43,358 [DEBUG] SelectIterator starting iterator @1635378213 for 'SELECT * FROM `Transactions` WHERE `user_id` = ?'
-2025-06-21 20:25:43,383 [DEBUG] StatementBuilder built statement SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?
-2025-06-21 20:25:43,384 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args
-2025-06-21 20:25:43,385 [DEBUG] SelectIterator starting iterator @1671590089 for 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?'
-2025-06-21 20:25:43,389 [DEBUG] BaseMappedStatement query-for-id using 'SELECT * FROM `tags` WHERE `id` = ?' and 1 args, got 1 result
-2025-06-21 20:25:43,391 [DEBUG] BaseMappedStatement query-for-id using 'SELECT * FROM `tags` WHERE `id` = ?' and 1 args, got 1 result
-2025-06-21 20:25:43,391 [DEBUG] SelectIterator closed iterator @1671590089 after 2 rows
-2025-06-21 20:25:43,391 [DEBUG] StatementExecutor query of 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args returned 2 results
-2025-06-21 20:25:43,392 [DEBUG] StatementBuilder built statement SELECT COUNT(*) FROM `Transactions` WHERE `id` = ?
-2025-06-21 20:25:43,393 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `Transactions` WHERE `id` = ?' returned 1
-2025-06-21 20:25:43,399 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `Transactions` SET `user_id` = ?, `direction` = ?, `amount` = ?, `description` = ?, `date` = ? WHERE `id` = ?' and 6 args, changed 1 rows
-2025-06-21 20:25:43,400 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'
-2025-06-21 20:25:43,401 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args
-2025-06-21 20:25:43,401 [DEBUG] StatementExecutor query-for-first of 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args returned at least 1 result
-2025-06-21 20:25:43,404 [DEBUG] StatementBuilder built statement SELECT COUNT(*) FROM `transaction_tags` WHERE `id` = ?
-2025-06-21 20:25:43,405 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `transaction_tags` WHERE `id` = ?' returned 1
-2025-06-21 20:25:43,405 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `transaction_tags` SET `transaction_id` = ?, `tag_id` = ? WHERE `id` = ?' and 3 args, changed 1 rows
-2025-06-21 20:25:43,406 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Salute'
-2025-06-21 20:25:43,407 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args
-2025-06-21 20:25:43,407 [DEBUG] StatementExecutor query-for-first of 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args returned at least 1 result
-2025-06-21 20:25:43,407 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `transaction_tags` WHERE `id` = ?' returned 1
-2025-06-21 20:25:43,408 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `transaction_tags` SET `transaction_id` = ?, `tag_id` = ? WHERE `id` = ?' and 3 args, changed 1 rows
-2025-06-21 20:25:43,408 [DEBUG] SelectIterator closed iterator @1635378213 after 1 rows
-2025-06-21 20:25:43,421 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Users` (`name` ) VALUES (?)' and 1 args, threw exception: org.sqlite.SQLiteException: [SQLITE_CONSTRAINT_UNIQUE] A UNIQUE constraint failed (UNIQUE constraint failed: Users.name)
+<pre>2025-06-22 15:18:52,241 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.Transaction with reflection
+2025-06-22 15:18:52,252 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag with reflection
+2025-06-22 15:18:52,254 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.filters.tags.PriorityTag with reflection
+2025-06-22 15:18:52,256 [DEBUG] DaoManager created dao for class class it.unicam.cs.mpgc.jbudget125639.entities.User with reflection
+2025-06-22 15:18:52,256 [INFO] TableUtils creating table 'Users'
+2025-06-22 15:18:52,744 [DEBUG] BaseJdbcConnectionSource opened connection to jdbc:sqlite:database.db got #187457031
+2025-06-22 15:18:52,784 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` VARCHAR NOT NULL ,  UNIQUE (`name`)) 
+2025-06-22 15:18:52,786 [INFO] TableUtils creating table 'Transactions'
+2025-06-22 15:18:52,788 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `Transactions` (`user_id` INTEGER , `id` INTEGER PRIMARY KEY AUTOINCREMENT , `direction` VARCHAR NOT NULL , `amount` BLOB NOT NULL , `description` VARCHAR NOT NULL , `date` TIMESTAMP NOT NULL ) 
+2025-06-22 15:18:52,789 [INFO] TableUtils creating table 'tags'
+2025-06-22 15:18:52,789 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `tags` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` VARCHAR NOT NULL , `priority` INTEGER NOT NULL ,  UNIQUE (`name`)) 
+2025-06-22 15:18:52,791 [INFO] TableUtils creating table 'transaction_tags'
+2025-06-22 15:18:52,791 [INFO] TableUtils executed create table statement changed 0 rows: CREATE TABLE IF NOT EXISTS `transaction_tags` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `transaction_id` INTEGER , `tag_id` INTEGER ) 
+2025-06-22 15:18:52,803 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Utenze'
+2025-06-22 15:18:52,810 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Utenze'' with 0 args
+2025-06-22 15:18:52,816 [DEBUG] SelectIterator starting iterator @1631119258 for 'SELECT * FROM `tags` WHERE `name` = 'Utenze''
+2025-06-22 15:18:52,829 [DEBUG] SelectIterator closed iterator @1631119258 after 1 rows
+2025-06-22 15:18:52,831 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Utenze'' with 0 args returned 1 results
+2025-06-22 15:18:52,831 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Sport'
+2025-06-22 15:18:52,832 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Sport'' with 0 args
+2025-06-22 15:18:52,833 [DEBUG] SelectIterator starting iterator @385739920 for 'SELECT * FROM `tags` WHERE `name` = 'Sport''
+2025-06-22 15:18:52,834 [DEBUG] SelectIterator closed iterator @385739920 after 1 rows
+2025-06-22 15:18:52,834 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Sport'' with 0 args returned 1 results
+2025-06-22 15:18:52,834 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'
+2025-06-22 15:18:52,835 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'' with 0 args
+2025-06-22 15:18:52,835 [DEBUG] SelectIterator starting iterator @452842611 for 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto''
+2025-06-22 15:18:52,835 [DEBUG] SelectIterator closed iterator @452842611 after 1 rows
+2025-06-22 15:18:52,837 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Manutenzione Auto'' with 0 args returned 1 results
+2025-06-22 15:18:52,837 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Alimentari'
+2025-06-22 15:18:52,837 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Alimentari'' with 0 args
+2025-06-22 15:18:52,838 [DEBUG] SelectIterator starting iterator @1076071888 for 'SELECT * FROM `tags` WHERE `name` = 'Alimentari''
+2025-06-22 15:18:52,839 [DEBUG] SelectIterator closed iterator @1076071888 after 1 rows
+2025-06-22 15:18:52,839 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Alimentari'' with 0 args returned 1 results
+2025-06-22 15:18:52,839 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'
+2025-06-22 15:18:52,841 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args
+2025-06-22 15:18:52,841 [DEBUG] SelectIterator starting iterator @7829163 for 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento''
+2025-06-22 15:18:52,841 [DEBUG] SelectIterator closed iterator @7829163 after 1 rows
+2025-06-22 15:18:52,842 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args returned 1 results
+2025-06-22 15:18:52,842 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'
+2025-06-22 15:18:52,842 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'' with 0 args
+2025-06-22 15:18:52,843 [DEBUG] SelectIterator starting iterator @2031588185 for 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento''
+2025-06-22 15:18:52,843 [DEBUG] SelectIterator closed iterator @2031588185 after 1 rows
+2025-06-22 15:18:52,843 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Intrattenimento'' with 0 args returned 1 results
+2025-06-22 15:18:52,843 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Salute'
+2025-06-22 15:18:52,844 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args
+2025-06-22 15:18:52,844 [DEBUG] SelectIterator starting iterator @230526532 for 'SELECT * FROM `tags` WHERE `name` = 'Salute''
+2025-06-22 15:18:52,845 [DEBUG] SelectIterator closed iterator @230526532 after 1 rows
+2025-06-22 15:18:52,845 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args returned 1 results
+2025-06-22 15:18:52,845 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Viaggi'
+2025-06-22 15:18:52,846 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Viaggi'' with 0 args
+2025-06-22 15:18:52,846 [DEBUG] SelectIterator starting iterator @1370283822 for 'SELECT * FROM `tags` WHERE `name` = 'Viaggi''
+2025-06-22 15:18:52,846 [DEBUG] SelectIterator closed iterator @1370283822 after 1 rows
+2025-06-22 15:18:52,847 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Viaggi'' with 0 args returned 1 results
+2025-06-22 15:18:52,847 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Educazione'
+2025-06-22 15:18:52,848 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Educazione'' with 0 args
+2025-06-22 15:18:52,848 [DEBUG] SelectIterator starting iterator @1783966110 for 'SELECT * FROM `tags` WHERE `name` = 'Educazione''
+2025-06-22 15:18:52,849 [DEBUG] SelectIterator closed iterator @1783966110 after 1 rows
+2025-06-22 15:18:52,849 [DEBUG] StatementExecutor query of 'SELECT * FROM `tags` WHERE `name` = 'Educazione'' with 0 args returned 1 results
+2025-06-22 15:18:52,919 [DEBUG] StatementBuilder built statement SELECT * FROM `Users`
+2025-06-22 15:18:52,920 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Users`' with 0 args
+2025-06-22 15:18:52,921 [DEBUG] SelectIterator starting iterator @1524305331 for 'SELECT * FROM `Users`'
+2025-06-22 15:18:52,927 [DEBUG] SelectIterator closed iterator @1524305331 after 2 rows
+2025-06-22 15:18:52,927 [DEBUG] StatementExecutor query of 'SELECT * FROM `Users`' with 0 args returned 2 results
+2025-06-22 15:18:52,986 [DEBUG] StatementBuilder built statement SELECT COUNT(*) FROM `Users` WHERE `id` = ?
+2025-06-22 15:18:52,999 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `Users` WHERE `id` = ?' returned 1
+2025-06-22 15:18:53,044 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `Users` SET `name` = ? WHERE `id` = ?' and 2 args, changed 1 rows
+2025-06-22 15:18:53,046 [DEBUG] StatementBuilder built statement SELECT * FROM `Transactions` WHERE `user_id` = ?
+2025-06-22 15:18:53,048 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `Transactions` WHERE `user_id` = ?' with 1 args
+2025-06-22 15:18:53,049 [DEBUG] SelectIterator starting iterator @1877062907 for 'SELECT * FROM `Transactions` WHERE `user_id` = ?'
+2025-06-22 15:18:53,059 [DEBUG] StatementBuilder built statement SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?
+2025-06-22 15:18:53,060 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args
+2025-06-22 15:18:53,061 [DEBUG] SelectIterator starting iterator @295304806 for 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?'
+2025-06-22 15:18:53,061 [DEBUG] BaseMappedStatement query-for-id using 'SELECT * FROM `tags` WHERE `id` = ?' and 1 args, got 1 result
+2025-06-22 15:18:53,063 [DEBUG] BaseMappedStatement query-for-id using 'SELECT * FROM `tags` WHERE `id` = ?' and 1 args, got 1 result
+2025-06-22 15:18:53,063 [DEBUG] SelectIterator closed iterator @295304806 after 2 rows
+2025-06-22 15:18:53,064 [DEBUG] StatementExecutor query of 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args returned 2 results
+2025-06-22 15:18:53,064 [DEBUG] StatementBuilder built statement SELECT COUNT(*) FROM `Transactions` WHERE `id` = ?
+2025-06-22 15:18:53,065 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `Transactions` WHERE `id` = ?' returned 1
+2025-06-22 15:18:53,069 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `Transactions` SET `user_id` = ?, `direction` = ?, `amount` = ?, `description` = ?, `date` = ? WHERE `id` = ?' and 6 args, changed 1 rows
+2025-06-22 15:18:53,070 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'
+2025-06-22 15:18:53,072 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args
+2025-06-22 15:18:53,072 [DEBUG] StatementExecutor query-for-first of 'SELECT * FROM `tags` WHERE `name` = 'Abbigliamento'' with 0 args returned at least 1 result
+2025-06-22 15:18:53,074 [DEBUG] StatementBuilder built statement SELECT COUNT(*) FROM `transaction_tags` WHERE `id` = ?
+2025-06-22 15:18:53,074 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `transaction_tags` WHERE `id` = ?' returned 1
+2025-06-22 15:18:53,075 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `transaction_tags` SET `transaction_id` = ?, `tag_id` = ? WHERE `id` = ?' and 3 args, changed 1 rows
+2025-06-22 15:18:53,075 [DEBUG] StatementBuilder built statement SELECT * FROM `tags` WHERE `name` = 'Salute'
+2025-06-22 15:18:53,075 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args
+2025-06-22 15:18:53,076 [DEBUG] StatementExecutor query-for-first of 'SELECT * FROM `tags` WHERE `name` = 'Salute'' with 0 args returned at least 1 result
+2025-06-22 15:18:53,076 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `transaction_tags` WHERE `id` = ?' returned 1
+2025-06-22 15:18:53,077 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `transaction_tags` SET `transaction_id` = ?, `tag_id` = ? WHERE `id` = ?' and 3 args, changed 1 rows
+2025-06-22 15:18:53,079 [DEBUG] StatementBuilder built statement SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?
+2025-06-22 15:18:53,079 [DEBUG] BaseMappedStatement prepared statement 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args
+2025-06-22 15:18:53,079 [DEBUG] SelectIterator starting iterator @711197015 for 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?'
+2025-06-22 15:18:53,079 [DEBUG] SelectIterator closed iterator @711197015 after 0 rows
+2025-06-22 15:18:53,079 [DEBUG] StatementExecutor query of 'SELECT * FROM `transaction_tags` WHERE `transaction_id` = ?' with 1 args returned 0 results
+2025-06-22 15:18:53,080 [DEBUG] StatementExecutor query of 'SELECT COUNT(*) FROM `Transactions` WHERE `id` = ?' returned 1
+2025-06-22 15:18:53,080 [DEBUG] BaseMappedStatement update data with statement 'UPDATE `Transactions` SET `user_id` = ?, `direction` = ?, `amount` = ?, `description` = ?, `date` = ? WHERE `id` = ?' and 6 args, changed 1 rows
+2025-06-22 15:18:53,080 [DEBUG] SelectIterator closed iterator @1877062907 after 2 rows
+2025-06-22 15:18:53,090 [DEBUG] BaseMappedStatement insert data with statement 'INSERT INTO `Users` (`name` ) VALUES (?)' and 1 args, threw exception: org.sqlite.SQLiteException: [SQLITE_CONSTRAINT_UNIQUE] A UNIQUE constraint failed (UNIQUE constraint failed: Users.name)
 </pre>
 </span>
 </div>
 <div id="tab2" class="tab">
 <h2>Standard error</h2>
 <span class="code">
-<pre>giu 21, 2025 8:25:43 PM it.unicam.cs.mpgc.jbudget125639.modules.ModulesHandler loadModule
-INFORMAZIONI: Loaded module: Database
-giu 21, 2025 8:25:43 PM it.unicam.cs.mpgc.jbudget125639.modules.ModulesHandler loadModule
-INFORMAZIONI: Loaded module: Global
-java.lang.RuntimeException: java.sql.SQLException: Unable to run insert stmt on object User(id=null, name=test, transactions=[Transaction(direction=IN, amount=10.0 €, description=descrizione, date=Sat Jun 21 20:25:43 CEST 2025, transactionTags=[it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag@3b, it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag@3b])]): INSERT INTO `Users` (`name` ) VALUES (?)
-	at it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule.lambda$saveState$1(GlobalModule.java:69)
-	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+<pre>giu 22, 2025 3:18:52 PM it.unicam.cs.mpgc.jbudget125639.modules.ModulesHandler loadModule
+INFO: Loaded module: Database
+giu 22, 2025 3:18:52 PM it.unicam.cs.mpgc.jbudget125639.modules.ModulesHandler loadModule
+INFO: Loaded module: Global
+java.lang.RuntimeException: java.sql.SQLException: Unable to run insert stmt on object User(id=null, name=test, transactions=[Transaction(direction=IN, amount=10.0 €, description=descrizione, date=Sun Jun 22 15:18:52 CEST 2025, transactionTags=[it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag@3b, it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag@3b])]): INSERT INTO `Users` (`name` ) VALUES (?)
+	at it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule.lambda$saveState$1(GlobalModule.java:72)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
 	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
 	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
-	at java.base/java.util.HashMap$KeySpliterator.forEachRemaining(HashMap.java:1715)
+	at java.base/java.util.HashMap$KeySpliterator.forEachRemaining(HashMap.java:1707)
 	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
 	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
-	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
-	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
 	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
 	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
-	at it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule.saveState(GlobalModule.java:65)
+	at it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule.saveState(GlobalModule.java:68)
 	at TestTagsSave.saveTransactionWithTags(TestTagsSave.java:48)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
 	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
 	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
@@ -235,7 +244,7 @@ java.lang.RuntimeException: java.sql.SQLException: Unable to run insert stmt on 
 	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
 	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
 	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
 	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
 	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
@@ -245,7 +254,7 @@ java.lang.RuntimeException: java.sql.SQLException: Unable to run insert stmt on 
 	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
 	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
 	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
 	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
 	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
@@ -270,8 +279,10 @@ java.lang.RuntimeException: java.sql.SQLException: Unable to run insert stmt on 
 	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:99)
 	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:94)
 	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:63)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
 	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
 	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
@@ -286,14 +297,14 @@ java.lang.RuntimeException: java.sql.SQLException: Unable to run insert stmt on 
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:71)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-Caused by: java.sql.SQLException: Unable to run insert stmt on object User(id=null, name=test, transactions=[Transaction(direction=IN, amount=10.0 €, description=descrizione, date=Sat Jun 21 20:25:43 CEST 2025, transactionTags=[it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag@3b, it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag@3b])]): INSERT INTO `Users` (`name` ) VALUES (?)
+Caused by: java.sql.SQLException: Unable to run insert stmt on object User(id=null, name=test, transactions=[Transaction(direction=IN, amount=10.0 €, description=descrizione, date=Sun Jun 22 15:18:52 CEST 2025, transactionTags=[it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag@3b, it.unicam.cs.mpgc.jbudget125639.entities.TransactionTag@3b])]): INSERT INTO `Users` (`name` ) VALUES (?)
 	at com.j256.ormlite.stmt.mapped.MappedCreate.insert(MappedCreate.java:139)
 	at com.j256.ormlite.stmt.StatementExecutor.create(StatementExecutor.java:464)
 	at com.j256.ormlite.dao.BaseDaoImpl.create(BaseDaoImpl.java:337)
 	at com.j256.ormlite.dao.BaseDaoImpl.createOrUpdate(BaseDaoImpl.java:396)
-	at it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule.saveUser(GlobalModule.java:75)
-	at it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule.lambda$saveState$1(GlobalModule.java:67)
-	... 92 more
+	at it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule.saveUser(GlobalModule.java:78)
+	at it.unicam.cs.mpgc.jbudget125639.modules.GlobalModule.lambda$saveState$1(GlobalModule.java:70)
+	... 96 more
 Caused by: org.sqlite.SQLiteException: [SQLITE_CONSTRAINT_UNIQUE] A UNIQUE constraint failed (UNIQUE constraint failed: Users.name)
 	at org.sqlite.core.DB.newSQLException(DB.java:1179)
 	at org.sqlite.core.DB.newSQLException(DB.java:1190)
@@ -305,7 +316,7 @@ Caused by: org.sqlite.SQLiteException: [SQLITE_CONSTRAINT_UNIQUE] A UNIQUE const
 	at org.sqlite.jdbc3.JDBC3PreparedStatement.executeUpdate(JDBC3PreparedStatement.java:100)
 	at com.j256.ormlite.jdbc.JdbcDatabaseConnection.insert(JdbcDatabaseConnection.java:185)
 	at com.j256.ormlite.stmt.mapped.MappedCreate.insert(MappedCreate.java:91)
-	... 97 more
+	... 101 more
 </pre>
 </span>
 </div>
@@ -317,7 +328,7 @@ Caused by: org.sqlite.SQLiteException: [SQLITE_CONSTRAINT_UNIQUE] A UNIQUE const
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.10</a> at 21 giu 2025, 20:25:43</p>
+<a href="http://www.gradle.org">Gradle 8.10</a> at 22 giu 2025, 15:18:53</p>
 </div>
 </div>
 </body>

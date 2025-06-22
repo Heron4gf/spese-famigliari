@@ -17,6 +17,7 @@ Implementato un sistema di filtri flessibile per data (giorno, settimana, mese, 
 
 ### Statistiche e Analisi
 Fornisce grafici a torta e a barre per l'analisi delle spese per categoria e periodo. Include trend temporali e confronti tra diversi intervalli di tempo.
+![stats.png](stats.png)
 
 ### Gestione Multi-Utente
 Supporta la creazione e gestione di utenti multipli con viste separate e aggregate. Ogni utente mantiene le proprie transazioni con possibilità di vista globale.
@@ -82,11 +83,11 @@ Il progetto segue la struttura standard Gradle con codice sorgente in `src/main/
 Il sistema utilizza SQLite come database embedded con ORMLite per il mapping oggetto-relazionale. La struttura include tre tabelle principali:
 
 - **Users**: Gestione utenti con nome univoco
-![user_db](user_db.png)
+- ![user_db](user_db.png)
 - **Transactions**: Movimenti finanziari con riferimento all'utente
-![transaction_db](transaction_db.png)
+- ![transaction_db](transaction_db.png)
 - **TransactionTags**: Associazione many-to-many tra transazioni e tag
-![transaction_tags](transaction_tags_db.png)
+- ![transaction_tags](transaction_tags_db.png)
 
 ## Mapping Entità-Relazioni
 Le relazioni sono gestite tramite annotazioni ORMLite con foreign keys e collezioni. `MoneyAmount` è serializzato come BLOB per mantenere l'integrità tra importo e valuta. Le transazioni database garantiscono consistenza dei dati.

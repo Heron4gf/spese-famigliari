@@ -11,17 +11,16 @@ import lombok.*;
  * I tag possono essere confrontati con transazioni per verificarne la presenza
  * e determinare l'importanza relativa rispetto ad altri tag.
  */
-@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @DatabaseTable(tableName = "tags")
+@Data
 public class PriorityTag implements Tag {
 
     /**
      * Identificatore univoco generato automaticamente per il tag.
      */
     @DatabaseField(generatedId = true)
-    @Getter
     private int id;
 
     /**
@@ -61,4 +60,5 @@ public class PriorityTag implements Tag {
         return transaction.getAssociatedTags()
                 .anyMatch(tag -> tag.getName().equals(this.name));
     }
+
 }

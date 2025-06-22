@@ -111,7 +111,7 @@ public class HeaderBarComponent implements NodeBuilder {
 
         if (viewNames != null && !viewNames.isEmpty()) {
             items.addAll(viewNames);
-            userBox.setValue(viewNames.getFirst());
+            userBox.setValue(viewNames.get(0));
         }
 
         items.add(""); // Separatore visivo
